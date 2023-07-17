@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AuthenticationBean implements Serializable {
-
+//Test comments by mayur jain
 	private String email;
 	private String password;
 	private User loggedInUser;
