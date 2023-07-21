@@ -42,7 +42,7 @@ public class AuthenticationBean implements Serializable {
 		return null;
 
 	}
-
+//test
 	
 	public String logout() {
 		try {
