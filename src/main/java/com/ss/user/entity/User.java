@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
-@Entity (name="User")
+@Entity
 @Data
 @Table(name = "user_details")
 public class User {

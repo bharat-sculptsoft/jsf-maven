@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
 	version="2.3">
 
-<<<<<<< HEAD
 <application>
 	<locale-config>
 		<default-locale>en</default-locale>
@@ -14,7 +13,7 @@
 		properties.message
 	</message-bundle>
 </application>
-=======
+
  <navigation-rule>
         <from-view-id>/*</from-view-id>
   <navigation-case>
@@ -35,5 +34,4 @@
         </navigation-case>
     </navigation-rule>
     
->>>>>>> c845ddf (Omnifaces, Prime face support , hibernate from jndi)
 </faces-config>

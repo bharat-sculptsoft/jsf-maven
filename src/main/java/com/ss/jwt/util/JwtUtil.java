@@ -1,7 +1,6 @@
 package com.ss.jwt.util;
 
 import java.security.Key;
-
 import java.util.Date;
 import java.util.function.Function;
 
@@ -18,7 +17,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 public class JwtUtil {
-//test
+
 	private static final String SECRET_KEY = "daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb";
 	private static final long EXPIRATION_TIME = (5*60*60*1000); // 5 hours
 

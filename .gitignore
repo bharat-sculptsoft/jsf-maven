@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c000239768c611451961190bad108764541c6fff
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -33,6 +36,7 @@ build/
 ### VS Code ###
 .vscode/
 /bin/
+<<<<<<< HEAD
 =======
 /target/
 */target/**
@@ -40,3 +44,5 @@ build/
 .project
 .settings/
 >>>>>>> c845ddf (Omnifaces, Prime face support , hibernate from jndi)
+=======
+>>>>>>> c000239768c611451961190bad108764541c6fff
