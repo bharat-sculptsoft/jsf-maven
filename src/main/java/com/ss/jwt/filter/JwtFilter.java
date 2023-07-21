@@ -1,7 +1,6 @@
 package com.ss.jwt.filter;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
 
 import javax.servlet.Filter;
@@ -14,23 +13,18 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ss.common.utility.BeanUtil;
-import com.ss.common.utility.MessageUtil;
-import com.ss.jwt.auth.AuthenticationBean;
+import com.ss.common.util.Constant;
+import com.ss.common.util.MessageConstant;
+import com.ss.common.util.MessageProvider;
 import com.ss.jwt.util.JwtUtil;
-import com.ss.user.dao.UserDao;
-import com.ss.user.pojo.User;
 
-public class JwtFilter implements Filter, Serializable {
-	public static final String LOGIN_PAGE = "/login.xhtml";
+import io.jsonwebtoken.ExpiredJwtException;
 
-	private static final String USER_DAO_BEAN_NAME = "userDaoImpl";
-	private static final String AUTH_BEAN_NAME = "authenticationBean";
+public class JwtFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 
-		BeanUtil.createApplicationBeanIfNotPresent(filterConfig.getServletContext(), USER_DAO_BEAN_NAME);
 	}
 
 	@Override
@@ -39,61 +33,46 @@ public class JwtFilter implements Filter, Serializable {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-		String token = extractTokenFromRequest(httpRequest);
-
-		if (isLoginUrls(httpRequest)) {
-			chain.doFilter(request, response);
-			return;
-		}
-
-		if (null != token) {
-			try {
-				validateJwtTokenWithUser(request, response, chain, httpRequest, httpResponse, token);
-			} catch (Exception e) {
-				e.printStackTrace();
-				httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+		try {
+			if (isLoginUrls(httpRequest)) {
+				chain.doFilter(request, response);
+				return;
 			}
-		} else {
-			httpResponse.sendRedirect(httpRequest.getContextPath() + LOGIN_PAGE);
-			// httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or
-			// invalid token");
-		}
+			String token = extractTokenFromRequest(httpRequest);
+			if (token != null && JwtUtil.validateToken(token)) {
 
-	}
+				// TODO : set userDetails in request from JWT
 
-	private void validateJwtTokenWithUser(ServletRequest request, ServletResponse response, FilterChain chain,
-			HttpServletRequest httpRequest, HttpServletResponse httpResponse, String token)
-			throws IOException, ServletException {
-		if (JwtUtil.validateToken(token)) {
-			User loggedInUser = getUserDetailsFromToken(httpRequest, token);
-
-			if (null != loggedInUser) {
-				AddAuthBeanDetailIfNotFound(httpRequest, loggedInUser);
+				// Token is valid, proceed with the request
 				chain.doFilter(request, response);
 			} else {
-				httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found..!");
+				// Token is invalid or not present, redirect to login page or show an error
+				MessageProvider.getMessageString(MessageConstant.JWT_INVALID_TOKEN, null, httpRequest.getLocale());
+				httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.xhtml");
 			}
-		} else {
-			httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Your session is expired..!");
+
+		} catch (ExpiredJwtException e) {
+			MessageProvider.getMessageString(MessageConstant.JWT_TOKEN_EXPIRED, null, httpRequest.getLocale());
+
+			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.xhtml");
+
+		} catch (Exception e) {
+			MessageProvider.getMessageString(MessageConstant.JWT_INVALID_TOKEN, null, httpRequest.getLocale());
+			// httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.xhtml");
+
 		}
-	}
 
-	private void AddAuthBeanDetailIfNotFound(HttpServletRequest httpRequest, User loggedInUser) {
-		BeanUtil.createRequestBeanIfNotPresent(httpRequest, AUTH_BEAN_NAME);
-		AuthenticationBean authBean = (AuthenticationBean) BeanUtil.getSessionBeanFromContext(httpRequest,
-				AUTH_BEAN_NAME);
-		authBean.setLoggedInUser(loggedInUser);
-	}
-
-	private User getUserDetailsFromToken(HttpServletRequest httpRequest, String token) {
-		String userEmail = JwtUtil.getSubject(token);
-		UserDao userDao = (UserDao) BeanUtil.getApplicationBeanFromContext(httpRequest, USER_DAO_BEAN_NAME);
-		return userDao.findByEmail(userEmail);
 	}
 
 	private boolean isLoginUrls(HttpServletRequest httpRequest) {
 
-		return httpRequest.getRequestURI().contains(LOGIN_PAGE);
+		String defaultURL = httpRequest.getContextPath() + "/";
+		String loginURL = httpRequest.getContextPath() + "/login";
+		String loginHtmlURL = httpRequest.getContextPath() + "/login.xhtml";
+
+		return (httpRequest.getRequestURI().equals(defaultURL) || httpRequest.getRequestURI().equals(loginURL)
+				|| httpRequest.getRequestURI().equals(loginHtmlURL));
 
 	}
 
@@ -101,7 +80,7 @@ public class JwtFilter implements Filter, Serializable {
 		Cookie[] cookies = request.getCookies();
 		if (cookies == null)
 			return null;
-		return Arrays.stream(cookies).filter(e -> MessageUtil.JWT_TOKEN_NAME.equals(e.getName())).findAny()
+		return Arrays.stream(cookies).filter(e -> Constant.JWT_TOKEN_NAME.equals(e.getName())).findAny()
 				.map(Cookie::getValue).orElse(null);
 
 	}
