@@ -11,7 +11,24 @@
 </h:head>
 
 <h:body>
+<<<<<<< HEAD
+	<h:form id="form-id" >
+	<h:messages/>
+	
+		<br />
+		<br />
+		<h:outputLabel >Email: </h:outputLabel>
 
+		<h:inputText id="email-id" label="Email"
+			value="#{authenticationBean.email}" a:placeholder="Enter your email." required="true"/>
+		<h:message for="email-id" style="color: red"/>
+
+		<br />
+		<br />
+		<h:outputLabel >Password: </h:outputLabel>
+
+		<h:inputSecret id="pwd-id" label="Password"
+=======
    <div class="login">
 	<h:form id="form-id">
 	    <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
@@ -21,6 +38,7 @@
 		
         <p:outputLabel for="pwd-id" value="Password:"/>
 		<p:password id="pwd-id" label="Password"
+>>>>>>> c845ddf (Omnifaces, Prime face support , hibernate from jndi)
 			value="#{authenticationBean.password}"
 			a:placeholder="Enter your password." required="true"  requiredMessage="Surname is required"/>
 

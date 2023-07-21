@@ -46,8 +46,14 @@ public class HibernateUtil {
 		em.getTransaction().rollback();
 	}
 	
+<<<<<<< HEAD:src/main/java/com/ss/common/util/HibernateUtil.java
 	public static void closeEntityManager(EntityManager em) {
       em.close();
   }
+=======
+//    <properties>
+//    <property name="hibernate.ejb.cfgfile" value="/hibernate.cfg.xml"/> 
+// </properties>
+>>>>>>> c845ddf (Omnifaces, Prime face support , hibernate from jndi):src/main/java/com/ss/common/utility/HibernateUtil.java
 
 }

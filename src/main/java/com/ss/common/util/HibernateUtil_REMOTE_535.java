@@ -1,4 +1,4 @@
-package com.ss.common.util;
+package com.ss.common.utility;
 
 import java.io.File;
 
@@ -46,8 +46,8 @@ public class HibernateUtil {
 		em.getTransaction().rollback();
 	}
 	
-	public static void closeEntityManager(EntityManager em) {
-      em.close();
-  }
+//    <properties>
+//    <property name="hibernate.ejb.cfgfile" value="/hibernate.cfg.xml"/> 
+// </properties>
 
 }

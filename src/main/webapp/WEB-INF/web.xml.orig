@@ -20,6 +20,10 @@
 	<filter-mapping>
 		<filter-name>JwtAuthenticationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
+<<<<<<< HEAD
+
+=======
+>>>>>>> c845ddf (Omnifaces, Prime face support , hibernate from jndi)
 	</filter-mapping>
 	<context-param>
     <param-name>org.omnifaces.FACES_VIEWS_SCAN_PATHS</param-name>

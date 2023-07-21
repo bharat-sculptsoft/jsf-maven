@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pageflow:Pageflow xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf16892468660780" configfile="/jsf-maven-project/src/main/webapp/WEB-INF/faces-config.xml"/>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf16892468660780" configfile="/jsf-maven-project/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="370" id="pf16896685038370" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf16896685038371 pf16896685038372 pf16896883382202" path="/*"/>
+  <nodes xsi:type="pageflow:PFPage" name="*.xhtml" x="338" y="178" id="pf16896685038374" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf16896685038371 pf16896883382202" path="*.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="login.xhtml" x="338" y="562" id="pf16896685038375" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf16896685038372" path="/login.xhtml"/>
+  <links id="pf16896685038371" target="pf16896685038374" source="pf16896685038370" outcome="success" redirect="true"/>
+  <links id="pf16896685038372" target="pf16896685038375" source="pf16896685038370" outcome="failure" redirect="true"/>
+  <links id="pf16896883382202" target="pf16896685038374" source="pf16896685038370" outcome="card" redirect="true"/>
+</pageflow:Pageflow>
