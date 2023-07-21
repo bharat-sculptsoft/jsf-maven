@@ -9,17 +9,7 @@
 
 	<dependencies>
 
-<!--<dependency>-->
-<!--            <groupId>javax.faces</groupId>-->
-<!--            <artifactId>javax.faces-api</artifactId>-->
-<!--            <version>2.3</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-        <dependency>
-    <groupId>org.omnifaces</groupId>
-    <artifactId>omnifaces</artifactId>
-    <version>1.14.1</version>
-</dependency>
+
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
@@ -47,11 +37,7 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-<dependency>
-    <groupId>org.primefaces</groupId>
-    <artifactId>primefaces</artifactId>
-    <version>12.0.0</version>
-</dependency>
+
 
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
@@ -78,16 +64,6 @@
 		</dependency>
 
 	</dependencies>
-	
-	<repositories>
-		<repository>
-			<id>prime-repo</id>
-			<name>PrimeFaces Maven Repository</name>
-			<url>https://repository.primefaces.org</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
-	
 	<build>
 		<plugins>
 			<plugin>

@@ -14,34 +14,27 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public User findByEmail(String email) {
-		EntityManager entityManager = HibernateUtil.getEntityManager();
-	//	EntityManager entityManager = HibernateUtil.beginTransaction();
-		
+		EntityManager entityManager = HibernateUtil.beginTransaction();
 		try {
 			String queryString = "SELECT u FROM User u WHERE u.email = :email";
 			User result= entityManager.createQuery(queryString,User.class).setParameter("email", email).getSingleResult();
-		//	entityManager.find(User.class, result);
-		//	entityManager.fin
-	//		HibernateUtil.commitTransaction(entityManager);
+			HibernateUtil.commitTransaction(entityManager);
 			return result;
 		}catch (Exception e) {
-	//		HibernateUtil.rollbackTransaction(entityManager);
+			HibernateUtil.rollbackTransaction(entityManager);
 			throw e;
 		}
 	}
 	@Override
 	public User findByEmailAndPassword(String email, String password) {
-		EntityManager entityManager = HibernateUtil.getEntityManager();
+		EntityManager entityManager = HibernateUtil.beginTransaction();
 		try {
 			String queryString = "SELECT u FROM User u WHERE u.email = :email and u.password=: password";
 			User result= entityManager.createQuery(queryString,User.class).setParameter("email", email).setParameter("password", password).getResultList().stream().findFirst().orElse(null);
-		//	CriteriaBuilder cb=entityManager.getCriteriaBuilder();
-			
-			
-	//		HibernateUtil.commitTransaction(entityManager);
+			HibernateUtil.commitTransaction(entityManager);
 			return result;
 		}catch (Exception e) {
-		//	HibernateUtil.rollbackTransaction(entityManager);
+			HibernateUtil.rollbackTransaction(entityManager);
 			throw e;
 		}
 	}

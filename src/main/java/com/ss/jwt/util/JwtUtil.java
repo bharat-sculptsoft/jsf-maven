@@ -33,7 +33,7 @@ public class JwtUtil {
 
     public static boolean validateToken(String token) {
         try {
-        	System.out.println("token 1 ---"+token);
+        	System.out.println("token---"+token);
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (Exception e) {

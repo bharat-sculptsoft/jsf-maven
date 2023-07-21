@@ -29,45 +29,17 @@ public class AuthenticationBean implements Serializable {
 
 	@ManagedProperty(value = "#{userDaoImpl}")
 	private UserDao userDao;
-//
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
-//	
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public User getLoggedInUser() {
-		return loggedInUser;
-	}
-
-	public void setLoggedInUser(User loggedInUser) {
-		this.loggedInUser = loggedInUser;
-	}
 
 	public String login() {
 
 		User user = userDao.findByEmailAndPassword(email, password);
 		if (user != null) {
+
 			String token = JwtUtil.generateToken(email);
 			// tokenBean.setToken(token); // store at server side
 			storeTokenAtClientSide(token); // store at client side
 			loggedInUser = user;
-			return MessageUtil.CARD_PAGE_REDIRECT_URL;
-			//return MessageUtil.SUCCESS_PAGE_REDIRECT_URL;
+			return MessageUtil.SUCCESS_PAGE_REDIRECT_URL;
 		} else {
 			return MessageUtil.LOGIN_PAGE_REDIRECT_URL;
 		}
@@ -95,10 +67,5 @@ public class AuthenticationBean implements Serializable {
 		response.addCookie(c);
 
 	}
-	@Override
-	public String toString() {
-		return "AuthenticationBean [email=" + email + ", password=" + password + ", loggedInUser=" + loggedInUser
-				+ ", userDao=" + userDao + "]";
-	}
-	
+
 }
