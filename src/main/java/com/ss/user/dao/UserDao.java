@@ -1,13 +1,14 @@
 package com.ss.user.dao;
 
-import com.ss.user.pojo.User;
+import com.ss.common.exception.DaoLayerException;
+import com.ss.user.entity.User;
 
 public interface UserDao {
 
-	public User findByEmail(String email);
+	public User findByEmail(String email) throws DaoLayerException ;
 
-	public User findByEmailAndPassword(String email, String password);
+	public User findByEmailAndPassword(String email, String password) throws DaoLayerException ;
 
-	public void save(User user);
+	public void save(User user) throws DaoLayerException ;
 
 }

@@ -20,7 +20,7 @@
 	<filter-mapping>
 		<filter-name>JwtAuthenticationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-		
+
 	</filter-mapping>
 	<welcome-file-list>
 		<welcome-file>login.xhtml</welcome-file>

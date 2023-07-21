@@ -1,4 +1,4 @@
-package com.ss.common.utility;
+package com.ss.common.util;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -36,5 +36,9 @@ public class HibernateUtil {
 	public static void rollbackTransaction(EntityManager em) {
 		em.getTransaction().rollback();
 	}
+	
+	public static void closeEntityManager(EntityManager em) {
+      em.close();
+  }
 
 }

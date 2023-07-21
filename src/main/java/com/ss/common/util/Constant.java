@@ -1,6 +1,11 @@
-package com.ss.common.utility;
+package com.ss.common.util;
 
-public class MessageUtil {
+/*this class is used to get the internal constant value
+*/
+public class Constant {
+
+	private Constant() {
+	}
 
 	public static final String JWT_TOKEN_NAME = "jwtToken";
 
