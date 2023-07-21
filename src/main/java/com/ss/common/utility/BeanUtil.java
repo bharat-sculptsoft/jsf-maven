@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ss.jwt.auth.AuthenticationBean;
 import com.ss.user.dao.impl.UserDaoImpl;
+import com.ss.user.pojo.User;
 
 public class BeanUtil {
 	private BeanUtil() {
@@ -16,16 +17,19 @@ public class BeanUtil {
 		UserDaoImpl UserDaoBean = (UserDaoImpl) servletContext.getAttribute(beanName);
 		if (null == UserDaoBean) {
 			UserDaoBean = new UserDaoImpl();
+			servletContext.setAttribute(beanName, UserDaoBean);
 		}
-		servletContext.setAttribute(beanName, UserDaoBean);
+		
 	}
 
-	public static void createRequestBeanIfNotPresent(HttpServletRequest httpRequest,String beanName) {
+	public static void createRequestBeanIfNotPresent(HttpServletRequest httpRequest,String beanName,User loggedInUser) {
 		AuthenticationBean authBean = (AuthenticationBean) getSessionBeanFromContext(httpRequest, beanName);
 		if (null == authBean) {
 			authBean = new AuthenticationBean();
+			authBean.setLoggedInUser(loggedInUser);
+			httpRequest.getSession().setAttribute(beanName, authBean);
 		}
-		httpRequest.getSession().setAttribute(beanName, authBean);
+		
 	}
 
 	public static Object getApplicationBeanFromContext(HttpServletRequest httpRequest, String beanName) {

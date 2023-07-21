@@ -7,6 +7,7 @@ import java.util.Arrays;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -22,7 +23,7 @@ import com.ss.user.dao.UserDao;
 import com.ss.user.pojo.User;
 
 public class JwtFilter implements Filter, Serializable {
-	public static final String LOGIN_PAGE = "/login.xhtml";
+	public static final String LOGIN_PAGE = "/login";
 
 	private static final String USER_DAO_BEAN_NAME = "userDaoImpl";
 	private static final String AUTH_BEAN_NAME = "authenticationBean";
@@ -40,12 +41,12 @@ public class JwtFilter implements Filter, Serializable {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		String token = extractTokenFromRequest(httpRequest);
-
+		
+		
 		if (isLoginUrls(httpRequest)) {
 			chain.doFilter(request, response);
 			return;
 		}
-
 		if (null != token) {
 			try {
 				validateJwtTokenWithUser(request, response, chain, httpRequest, httpResponse, token);
@@ -58,7 +59,7 @@ public class JwtFilter implements Filter, Serializable {
 			// httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or
 			// invalid token");
 		}
-
+		
 	}
 
 	private void validateJwtTokenWithUser(ServletRequest request, ServletResponse response, FilterChain chain,
@@ -79,10 +80,11 @@ public class JwtFilter implements Filter, Serializable {
 	}
 
 	private void AddAuthBeanDetailIfNotFound(HttpServletRequest httpRequest, User loggedInUser) {
-		BeanUtil.createRequestBeanIfNotPresent(httpRequest, AUTH_BEAN_NAME);
+		BeanUtil.createRequestBeanIfNotPresent(httpRequest, AUTH_BEAN_NAME,loggedInUser);
 		AuthenticationBean authBean = (AuthenticationBean) BeanUtil.getSessionBeanFromContext(httpRequest,
 				AUTH_BEAN_NAME);
-		authBean.setLoggedInUser(loggedInUser);
+		System.out.println(authBean.toString());
+		//authBean.setLoggedInUser(loggedInUser);
 	}
 
 	private User getUserDetailsFromToken(HttpServletRequest httpRequest, String token) {
