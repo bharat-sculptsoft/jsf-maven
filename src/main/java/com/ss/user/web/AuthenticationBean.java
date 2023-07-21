@@ -43,7 +43,6 @@ public class AuthenticationBean implements Serializable {
 
 	}
 
-	
 	public String logout() {
 		try {
 			userService.logoutUser();
