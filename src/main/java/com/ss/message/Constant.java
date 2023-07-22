@@ -1,4 +1,4 @@
-package com.ss.common.util;
+package com.ss.message;
 
 /*this class is used to get the internal constant value
 */

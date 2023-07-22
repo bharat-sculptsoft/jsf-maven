@@ -1,4 +1,4 @@
-package com.ss.jwt.util;
+package com.ss.util;
 
 import java.security.Key;
 import java.util.Date;
@@ -8,7 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ss.common.util.Constant;
+import com.ss.message.Constant;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -19,7 +19,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtil {
 
 	private static final String SECRET_KEY = "daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb";
-	private static final long EXPIRATION_TIME = (5*60*60*1000); // 5 hours
+	private static final long EXPIRATION_TIME = (1 * 60 * 1000); // 5 hours
 
 	public static String generateToken(String subject) {
 		return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
@@ -28,7 +28,7 @@ public class JwtUtil {
 
 	private static Key getKey() {
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
-		
+
 	}
 
 	public String getSubject(String token) {
@@ -65,20 +65,21 @@ public class JwtUtil {
 		return claimsResolver.apply(claims.getBody());
 	}
 
-	public static void storeTokenAtClientSide(String token) {
+	public static void storeTokenInCookie(String token) {
 		// Store the token on the client side (e.g., in a cookie)
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
 				.getResponse();
-		response.addCookie(new Cookie(Constant.JWT_TOKEN_NAME, token));
+		Cookie cookie = new Cookie(Constant.JWT_TOKEN_NAME, token);
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);		
+		httpServletResponse.addCookie(cookie);
 	}
 
-	public static void removeTokenAtClientSide() {
+	public static void removeTokenfromCookie(HttpServletResponse httpServletResponse) {
 		// Store the token on the client side (e.g., in a cookie)
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
-				.getResponse();
 		Cookie c = new Cookie(Constant.JWT_TOKEN_NAME, null);
 		c.setMaxAge(0);
-		response.addCookie(c);
+		httpServletResponse.addCookie(c);
 
 	}
 

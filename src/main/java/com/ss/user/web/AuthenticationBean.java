@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import com.ss.common.util.Constant;
+import com.ss.message.Constant;
 import com.ss.user.service.UserService;
 
 import lombok.Data;

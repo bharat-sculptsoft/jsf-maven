@@ -1,4 +1,4 @@
-package com.ss.common.exception;
+package com.ss.exception;
 
 public class ServiceLayerException extends Exception {
 	

@@ -19,19 +19,19 @@
     <h:form>
         <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
             <p:outputLabel for="firstname" value="Firstname:"/>
-            <p:inputText id="firstname" value="#{processView.firstname}"/>
+            <p:inputText id="firstname" value="#{signupBean.firstname}"/>
 
             <p:outputLabel for="middle" value="Middle:"/>
-            <p:inputText id="middle" value="#{processView.middlename}"/>
+            <p:inputText id="middle" value="#{signupBean.middlename}"/>
 
             <p:outputLabel for="surname" value="Surname:"/>
-            <p:inputText id="surname" value="#{processView.lastname}" required="true"
+            <p:inputText id="surname" value="#{signupBean.lastname}" required="true"
                          requiredMessage="Surname is required">
                           <f:validateLength minimum="2"/>
             </p:inputText>
         </h:panelGrid>
 
-        <p:commandButton value="Save" id="btnAll" process="@all" update="grid msgs" action="#{processView.save}" styleClass="mr-2"/>
+        <p:commandButton value="Save" id="btnAll" process="@all" update="grid msgs" action="#{signupBean.save}" styleClass="mr-2"/>
        
 
         <p:messages id="msgs"/>

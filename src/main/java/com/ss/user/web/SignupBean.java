@@ -1,4 +1,4 @@
-package com.ss.jwt.auth;
+package com.ss.user.web;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -7,7 +7,7 @@ import javax.faces.context.FacesContext;
 
 @ManagedBean
 @RequestScoped
-public class ProcessView {
+public class SignupBean {
 
     private String firstname;
     private String middlename;
