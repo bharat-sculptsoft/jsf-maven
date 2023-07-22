@@ -1,6 +1,6 @@
 package com.ss.user.dao;
 
-import com.ss.common.exception.DaoLayerException;
+import com.ss.exception.DaoLayerException;
 import com.ss.user.entity.User;
 
 public interface UserDao {

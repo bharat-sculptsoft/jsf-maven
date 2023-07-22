@@ -1,4 +1,4 @@
-package com.ss.common.util;
+package com.ss.message;
 
 import java.text.MessageFormat;
 import java.util.Locale;

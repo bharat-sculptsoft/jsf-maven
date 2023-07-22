@@ -1,4 +1,4 @@
-package com.ss.jwt.filter;
+package com.ss.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,17 +9,19 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ss.common.util.Constant;
-import com.ss.common.util.MessageConstant;
-import com.ss.common.util.MessageProvider;
-import com.ss.jwt.util.JwtUtil;
+import com.ss.message.Constant;
+import com.ss.message.MessageConstant;
+import com.ss.message.MessageProvider;
+import com.ss.util.JwtUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
+@WebFilter("/*")
 public class JwtFilter implements Filter {
 
 	@Override
@@ -32,7 +34,6 @@ public class JwtFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-
 		try {
 			if (isLoginUrls(httpRequest)) {
 				chain.doFilter(request, response);
@@ -52,8 +53,8 @@ public class JwtFilter implements Filter {
 			}
 
 		} catch (ExpiredJwtException e) {
+			JwtUtil.removeTokenfromCookie(httpResponse);
 			MessageProvider.getMessageString(MessageConstant.JWT_TOKEN_EXPIRED, null, httpRequest.getLocale());
-
 			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.xhtml");
 
 		} catch (Exception e) {

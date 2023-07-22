@@ -1,6 +1,6 @@
 package com.ss.user.service;
 
-import com.ss.common.exception.ServiceLayerException;
+import com.ss.exception.ServiceLayerException;
 
 public interface UserService {
 

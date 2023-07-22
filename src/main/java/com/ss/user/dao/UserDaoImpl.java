@@ -8,11 +8,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.ss.common.exception.DaoLayerException;
-import com.ss.common.util.HibernateUtil;
-import com.ss.common.util.MessageConstant;
-import com.ss.common.util.MessageProvider;
+import com.ss.exception.DaoLayerException;
+import com.ss.message.MessageConstant;
+import com.ss.message.MessageProvider;
 import com.ss.user.entity.User;
+import com.ss.util.HibernateUtil;
 
 @ManagedBean(name = "userDao")
 @ApplicationScoped
