@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c000239768c611451961190bad108764541c6fff
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -43,6 +39,3 @@ build/
 .classpath
 .project
 .settings/
->>>>>>> c845ddf (Omnifaces, Prime face support , hibernate from jndi)
-=======
->>>>>>> c000239768c611451961190bad108764541c6fff
