@@ -1,7 +1,6 @@
 package com.ss.user.service;
 
 import javax.faces.bean.ApplicationScoped;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
@@ -24,14 +23,6 @@ public class UserServiceImpl implements UserService {
 
 	@ManagedProperty(value = "#{userDao}")
 	private UserDao userDao;
-
-	public UserDao getUserDao() {
-		return userDao;
-	}
-
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
 
 	@Override
 	public boolean authenticate(String email, String password) throws ServiceLayerException {
