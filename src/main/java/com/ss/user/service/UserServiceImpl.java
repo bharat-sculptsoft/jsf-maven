@@ -4,15 +4,16 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 
-import com.ss.common.exception.DaoLayerException;
-import com.ss.common.exception.NotFoundException;
-import com.ss.common.exception.ServiceLayerException;
-import com.ss.common.util.MessageConstant;
-import com.ss.common.util.MessageProvider;
-import com.ss.jwt.util.JwtUtil;
+import com.ss.exception.DaoLayerException;
+import com.ss.exception.NotFoundException;
+import com.ss.exception.ServiceLayerException;
+import com.ss.message.MessageConstant;
+import com.ss.message.MessageProvider;
 import com.ss.user.dao.UserDao;
 import com.ss.user.entity.User;
+import com.ss.util.JwtUtil;
 
 import lombok.Data;
 
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
 			}
 
 			String token = JwtUtil.generateToken(user.getEmail());
-			JwtUtil.storeTokenAtClientSide(token);
+			JwtUtil.storeTokenInCookie(token);
 			return true;
 		} catch (DaoLayerException | NotFoundException e) {
 			e.printStackTrace();
@@ -52,8 +53,11 @@ public class UserServiceImpl implements UserService {
 	public void logoutUser() throws ServiceLayerException {
 
 		try {
-			JwtUtil.removeTokenAtClientSide();
-			FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			FacesContext context= FacesContext.getCurrentInstance();
+			HttpServletResponse httpServletResponse = (HttpServletResponse) context.getExternalContext().getResponse();
+			JwtUtil.removeTokenfromCookie(httpServletResponse);
+			context.getExternalContext().invalidateSession();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceLayerException(

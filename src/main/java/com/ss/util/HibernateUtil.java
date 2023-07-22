@@ -1,15 +1,10 @@
-package com.ss.common.util;
-
-import java.io.File;
+package com.ss.util;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 @ManagedBean
 @ApplicationScoped

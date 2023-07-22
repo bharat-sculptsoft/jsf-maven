@@ -12,19 +12,21 @@
 
 <h:body>
 
-   <div class="login">
+   <div class="card">
 	<h:form id="form-id">
-	    <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
+	    <h:messages  />  
+	
+	    <p:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
         <p:outputLabel for="email-id" value="Email:"/>
 		<p:inputText id="email-id" value="#{authenticationBean.email}" a:placeholder="Enter your email." required="true"
-		 requiredMessage="Surname is required"/>
+		 requiredMessage="Email is required"/>
 		
         <p:outputLabel for="pwd-id" value="Password:"/>
 		<p:password id="pwd-id" label="Password"
 			value="#{authenticationBean.password}"
-			a:placeholder="Enter your password." required="true"  requiredMessage="Surname is required"/>
+			a:placeholder="Enter your password." required="true"  requiredMessage="Password is required"/>
 
-  </h:panelGrid>
+  </p:panelGrid>
 
   <br/>
     &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp; 
