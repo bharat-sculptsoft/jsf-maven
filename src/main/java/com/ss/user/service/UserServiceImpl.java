@@ -1,11 +1,12 @@
 package com.ss.user.service;
 
 import javax.faces.bean.ApplicationScoped;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
-
 import com.ss.exception.DaoLayerException;
 import com.ss.exception.NotFoundException;
 import com.ss.exception.ServiceLayerException;
@@ -22,13 +23,29 @@ import lombok.Data;
 @Data
 public class UserServiceImpl implements UserService {
 
+	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+	
 	@ManagedProperty(value = "#{userDao}")
 	private UserDao userDao;
+//
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
 
 	@Override
 	public boolean authenticate(String email, String password) throws ServiceLayerException {
 
 		try {
+			logger.trace("We've just greeted the user!");
+			logger.debug("We've just greeted the user! 1");
+			logger.info("We've just greeted the user!");
+			logger.warn("We've just greeted the user!");
+			logger.error("We've just greeted the user!");
+			logger.fatal("We've just greeted the user!");
 			User user = userDao.findByEmailAndPassword(email, password);
 
 			if (null == user) {
