@@ -1,6 +1,8 @@
 package com.ss.user.service;
 
 import javax.faces.bean.ApplicationScoped;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
@@ -24,8 +26,11 @@ public class UserServiceImpl implements UserService {
   @ManagedProperty(value = "#{userDao}")
   private UserDao userDao;
 
+  private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
+  
   @Override
   public boolean authenticate(String email, String password) throws ServiceLayerException {
+    logger.info("authenticate()...");
     try {
       User user = userDao.findByEmailAndPassword(email, password);
       if (null == user) {
