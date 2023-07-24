@@ -1,7 +1,6 @@
 package com.ss.message;
 
 import java.text.MessageFormat;
-
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
