@@ -12,28 +12,30 @@
 
 <h:body>
 
-   <div class="card">
-	<h:form id="form-id">
-	    <h:messages  />  
-	
-	    <p:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
-        <p:outputLabel for="email-id" value="Email:"/>
-		<p:inputText id="email-id" value="#{authenticationBean.email}" a:placeholder="Enter your email." required="true"
-		 requiredMessage="Email is required"/>
-		
-        <p:outputLabel for="pwd-id" value="Password:"/>
-		<p:password id="pwd-id" label="Password"
-			value="#{authenticationBean.password}"
-			a:placeholder="Enter your password." required="true"  requiredMessage="Password is required"/>
+	<div class="card">
+		<h:form id="form-id">
+			<p:messages id="msgs" />
 
-  </p:panelGrid>
+			<p:panelGrid id="grid" cellpadding="7" columns="2">
+				<p:outputLabel for="email-id" value="Email:" />
+				<p:inputText id="email-id" value="#{authenticationBean.email}"
+					a:placeholder="Enter your email." required="true"
+					requiredMessage="Email is required" />
 
-  <br/>
+				<p:outputLabel for="pwd-id" value="Password:" />
+				<p:password id="pwd-id" label="Password"
+					value="#{authenticationBean.password}"
+					a:placeholder="Enter your password." />
+
+			</p:panelGrid>
+
+			<br />
     &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp; 
-		<p:commandButton value="Login" action="#{authenticationBean.login}" styleClass="mr-2"/>
+		<p:commandButton value="Login" action="#{authenticationBean.login}"
+				update="grid msgs" styleClass="mr-2" />
 
-	</h:form>
-</div>
+		</h:form>
+	</div>
 </h:body>
 
 </html>

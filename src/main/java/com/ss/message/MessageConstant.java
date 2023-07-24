@@ -16,4 +16,10 @@ public class MessageConstant {
 
 	public static final String INCORRECT_USERNAME_PASSWORD = "incorrect.username.or.password";
 
+	
+	//validation message 
+	public static final String EMAIL_NOT_BLANK_VALIDATION_MESSAGE = "Email should not be blank";
+	public static final String EMAIL_REGEX_VALIDATION_MESSAGE = "Enter valid email address";
+	public static final String PASSWORD_NOT_BLANK_VALIDATION_MESSAGE = "Password should not be blank";
+
 }

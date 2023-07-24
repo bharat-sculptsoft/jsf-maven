@@ -1,20 +1,24 @@
 package com.ss.user.service;
 
+
 import javax.faces.bean.ApplicationScoped;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.ss.exception.DaoLayerException;
-import com.ss.exception.NotFoundException;
 import com.ss.exception.ServiceLayerException;
+import com.ss.exception.ValidationFailedException;
 import com.ss.message.MessageConstant;
 import com.ss.message.MessageProvider;
 import com.ss.user.dao.UserDao;
 import com.ss.user.entity.User;
 import com.ss.util.JwtUtil;
+import com.ss.util.PasswordHashingUtil;
 
 import lombok.Data;
 
@@ -46,16 +50,17 @@ public class UserServiceImpl implements UserService {
 			logger.warn("We've just greeted the user!");
 			logger.error("We've just greeted the user!");
 			logger.fatal("We've just greeted the user!");
-			User user = userDao.findByEmailAndPassword(email, password);
+			User user = userDao.findByEmail(email);
 
-			if (null == user) {
-				throw new NotFoundException(MessageProvider.getMessageString(MessageConstant.USER_NOT_FOUND, null));
+			if (null != user && PasswordHashingUtil.match(password, user.getPassword())) {
+				String token = JwtUtil.generateToken(user.getEmail());
+				JwtUtil.storeTokenInCookie(token);
+				return true;
+			}else {
+				throw new ValidationFailedException(MessageProvider.getMessageString(MessageConstant.INCORRECT_USERNAME_PASSWORD, null));
 			}
 
-			String token = JwtUtil.generateToken(user.getEmail());
-			JwtUtil.storeTokenInCookie(token);
-			return true;
-		} catch (DaoLayerException | NotFoundException e) {
+		} catch (DaoLayerException | ValidationFailedException e) {
 			e.printStackTrace();
 			throw new ServiceLayerException(e.getMessage());
 		} catch (Exception e) {
@@ -82,5 +87,5 @@ public class UserServiceImpl implements UserService {
 
 		}
 	}
-
+	
 }

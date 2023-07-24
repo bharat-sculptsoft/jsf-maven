@@ -1,7 +1,6 @@
 package com.ss.message;
 
 import java.text.MessageFormat;
-
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -24,7 +23,7 @@ public class MessageProvider {
 
 	/*
 	 * this method should use inside JSF life cycle,because automatically get the
-	 * locale data from vi.
+	 * locale data from view.
 	 */
 	public static String getMessageString(String key, Object[] params) {
 
