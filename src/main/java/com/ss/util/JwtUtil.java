@@ -19,7 +19,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtil {
 
 	private static final String SECRET_KEY = "daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb";
-	private static final long EXPIRATION_TIME = (1 * 60 * 1000); // 5 hours
+	private static final long EXPIRATION_TIME = (5 * 60 * 1000); // 5 hours
 
 	public static String generateToken(String subject) {
 		return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
