@@ -16,4 +16,5 @@ public class MessageConstant {
 
 	public static final String INCORRECT_USERNAME_PASSWORD = "incorrect.username.or.password";
 
+	public static final String USER_ALREADY_EXISTS = "user.already.exists";
 }

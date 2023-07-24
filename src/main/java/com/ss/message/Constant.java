@@ -11,5 +11,8 @@ public class Constant {
 
 	public static final String SUCCESS_PAGE_REDIRECT_URL = "success?faces-redirect=true";
 	public static final String LOGIN_PAGE_REDIRECT_URL = "login?faces-redirect=true";
-
+	public static final String SIGNUP_SUCCESS_PAGE_REDIRECT_URL = "signupsuccess?faces-redirect=true";
+	
+	public static final String EMAIL = "email";
+	public static final String PASSWORD = "password";
 }

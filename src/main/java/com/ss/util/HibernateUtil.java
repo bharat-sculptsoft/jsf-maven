@@ -10,39 +10,32 @@ import javax.persistence.Persistence;
 @ApplicationScoped
 public class HibernateUtil {
 
-	private HibernateUtil() {
-
-	}
-
-	private static EntityManagerFactory entityManagerFactory;
-
-	public static EntityManager getEntityManager() {
-		if (entityManagerFactory == null) {
-			entityManagerFactory = Persistence.createEntityManagerFactory("jsf-maven-project");
-		}
-		
-//		File f = new File("C:\\conf\\hibernate.cfg.xml");
-//		SessionFactory sessionFactory = new Configuration().configure(f).buildSessionFactory();
-//		return sessionFactory.createEntityManager();
-		return entityManagerFactory.createEntityManager();
-	}
-
-	public static EntityManager beginTransaction() {
-		EntityManager entityManager = getEntityManager();
-		entityManager.getTransaction().begin();
-		return entityManager;
-	}
-
-	public static void commitTransaction(EntityManager em) {
-		em.getTransaction().commit();
-	}
-	
-	public static void rollbackTransaction(EntityManager em) {
-		em.getTransaction().rollback();
-	}
-	
-	public static void closeEntityManager(EntityManager em) {
-      em.close();
+  private HibernateUtil() {
   }
 
+  private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("jsf-maven-project");
+
+  public static EntityManager getEntityManager() {
+    return entityManagerFactory.createEntityManager();
+  }
+  
+  public static void beginTransaction(EntityManager entityManager) {
+    entityManager.getTransaction().begin();
+  }
+
+  public static void commitTransaction(EntityManager entityManager) {
+    entityManager.getTransaction().commit();
+  }
+  
+  public static void rollbackTransaction(EntityManager entityManager) {
+    if(entityManager.getTransaction().isActive()) {
+      entityManager.getTransaction().rollback();
+    } 
+  }
+
+  public static void closeEntityManager(EntityManager entityManager) {
+    if(entityManager != null && entityManager.isOpen()) {
+      entityManager.close();
+    }
+  }
 }
