@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<title>User SignUp</title>
+</h:head>
+<h:body>
+	<div class="card" style="width:25%;margin:auto;padding:10px;">
+    <h:form>
+        <p:panel id="pnl" header="Sign Up">
+            <h:panelGrid>
+            	<p:outputLabel for="name"  value="Name" styleClass="control-label"/>
+       			<p:inputText id="name" value="#{signupBean.name}"/>
+       			
+       			<p:outputLabel for="email" value="Email" styleClass="control-label"/>
+   				<p:inputText id="email" value="#{signupBean.email}"/>
+   				
+       			<p:outputLabel for="phone" value="Phone Number" styleClass="control-label"/>
+   				<p:inputText id="phone" value="#{signupBean.phonenumber}"/>
+       			
+       			<p:outputLabel for="birthDate" value="Birth Date" styleClass="control-label"/>
+                <p:datePicker id="birthDate" value="#{signupBean.birthdate}" />
+
+				<h:outputLabel for="gender" value="Gender" styleClass="control-label"/>
+   				<p:selectOneRadio id="gender" value="#{signupBean.gender}">
+        	    	<f:selectItem itemLabel="Male" itemValue="Male"/>
+            		<f:selectItem itemLabel="Female" itemValue="Female"/>
+            		<f:selectItem itemLabel="Other" itemValue="Other"/>
+		        </p:selectOneRadio>
+   				
+   				<h:outputLabel for="address" value="Address" styleClass="control-label"/>
+   				<p:inputTextarea id="address" counter="display" maxlength="50" value="#{signupBean.address}"
+                         counterTemplate="{0} characters remaining." autoResize="false"/>
+        		<h:outputText id="display" class="block" />
+        		
+        	</h:panelGrid>
+			<br></br>
+            <p:commandButton id="saveBtn" value="Save" icon="pi pi-check" action="#{signupBean.signup}" styleClass="mt-3" />
+        </p:panel>
+    </h:form>
+    </div>
+</h:body>
+</html>
