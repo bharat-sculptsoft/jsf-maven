@@ -16,7 +16,12 @@
 
  <navigation-rule>
         <from-view-id>/*</from-view-id>
-  <navigation-case>
+        <navigation-case>
+            <from-outcome>signup</from-outcome>
+            <to-view-id>*.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+  		<navigation-case>
             <from-outcome>card</from-outcome>
             <to-view-id>*.xhtml</to-view-id>
             <redirect/>
@@ -26,7 +31,6 @@
             <to-view-id>*.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-
         <navigation-case>
             <from-outcome>failure</from-outcome>
             <to-view-id>/login.xhtml</to-view-id>
