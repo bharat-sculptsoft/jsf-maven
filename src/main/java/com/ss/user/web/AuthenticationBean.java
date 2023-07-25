@@ -7,6 +7,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import com.ss.message.Constant;
 import com.ss.user.service.UserService;
@@ -20,43 +22,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationBean implements Serializable {
 
-
 	private static final long serialVersionUID = 1L;
-	
+
+	@NotBlank(message = "{validation.authenticationBean.email.NotBlank}")
+	@Email(regexp = Constant.EMAIL_REGEX, message ="{validation.authenticationBean.email.Regex}")
 	private String email;
+
+	@NotBlank(message = "{validation.authenticationBean.password.NotBlank}")
 	private String password;
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public UserService getUserService() {
-		return userService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 
 	@ManagedProperty(value = "#{userService}")
 	private UserService userService;
 
 	public String login() {
 		try {
-	        
-			if(userService.authenticate(email, password)) {
+			if (userService.authenticate(email, password)) {
 				return Constant.SUCCESS_PAGE_REDIRECT_URL;
 			}
 		} catch (Exception e) {
@@ -72,7 +52,7 @@ public class AuthenticationBean implements Serializable {
 			userService.logoutUser();
 			// Perform any additional cleanup or logout logic
 			return Constant.LOGIN_PAGE_REDIRECT_URL;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
 		}

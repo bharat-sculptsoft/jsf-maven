@@ -43,8 +43,7 @@ public class JwtFilter implements Filter {
 			String token = extractTokenFromRequest(httpRequest);
 			if (token != null && JwtUtil.validateToken(token)) {
 
-				// TODO : set userDetails in request from JWT
-
+				httpRequest.setAttribute(Constant.USER_PALYLOAD,JwtUtil.getSubjectFromToken(token));
 				// Token is valid, proceed with the request
 				chain.doFilter(request, response);
 			} else {
