@@ -1,6 +1,5 @@
 package com.ss.user.service;
 
-
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -28,10 +27,10 @@ import lombok.Data;
 public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-	
+
 	@ManagedProperty(value = "#{userDao}")
 	private UserDao userDao;
-//
+
 	public UserDao getUserDao() {
 		return userDao;
 	}
@@ -56,8 +55,9 @@ public class UserServiceImpl implements UserService {
 				String token = JwtUtil.generateToken(user.getEmail());
 				JwtUtil.storeTokenInCookie(token);
 				return true;
-			}else {
-				throw new ValidationFailedException(MessageProvider.getMessageString(MessageConstant.INCORRECT_USERNAME_PASSWORD, null));
+			} else {
+				throw new ValidationFailedException(
+						MessageProvider.getMessageString(MessageConstant.INCORRECT_USERNAME_PASSWORD, null));
 			}
 
 		} catch (DaoLayerException | ValidationFailedException e) {
@@ -73,19 +73,35 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void logoutUser() throws ServiceLayerException {
-
 		try {
-			FacesContext context= FacesContext.getCurrentInstance();
+			FacesContext context = FacesContext.getCurrentInstance();
 			HttpServletResponse httpServletResponse = (HttpServletResponse) context.getExternalContext().getResponse();
 			JwtUtil.removeTokenfromCookie(httpServletResponse);
 			context.getExternalContext().invalidateSession();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceLayerException(
 					MessageProvider.getMessageString(MessageConstant.INTERNAL_SERVER_ERROR, null));
-
 		}
 	}
-	
+
+	@Override
+	// @Transactional
+	public void signUp(User user) throws ServiceLayerException {
+		try {
+			User userDetails = userDao.findByEmail(user.getEmail());
+			if (null != userDetails) {
+				throw new ValidationFailedException(MessageProvider
+						.getMessageString(MessageConstant.USER_ALREADY_EXISTS, new Object[] { user.getEmail() }));
+			}
+			userDao.save(user);
+		} catch (DaoLayerException | ValidationFailedException e) {
+			e.printStackTrace();
+			throw new ServiceLayerException(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceLayerException(
+					MessageProvider.getMessageString(MessageConstant.INTERNAL_SERVER_ERROR, null));
+		}
+	}
 }

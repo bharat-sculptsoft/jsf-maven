@@ -9,7 +9,7 @@ import javax.faces.context.FacesContext;
 
 public class MessageProvider {
 
-	private static final String BUNDLE_NAME = "properties.message";
+	private static final String BUNDLE_NAME = "ValidationMessages";
 
 	/*
 	 * this method should use when we have to pass locale explicitly.

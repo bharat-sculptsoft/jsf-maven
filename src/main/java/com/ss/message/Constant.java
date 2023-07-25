@@ -15,4 +15,8 @@ public class Constant {
 
 	public static final String EMAIL_REGEX = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
 
+	public static final String SIGNUP_SUCCESS_PAGE_REDIRECT_URL = "signupsuccess?faces-redirect=true";
+	
+	public static final String EMAIL = "email";
+	public static final String PASSWORD = "password";
 }

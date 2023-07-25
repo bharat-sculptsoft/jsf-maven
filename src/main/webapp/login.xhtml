@@ -22,6 +22,7 @@
 					a:placeholder="Enter your email." required="true"
 					requiredMessage="Email is required" />
 
+
 				<p:outputLabel for="pwd-id" value="Password:" />
 				<p:password id="pwd-id" label="Password"
 					value="#{authenticationBean.password}"
@@ -32,7 +33,8 @@
 			<br />
     &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp; 
 		<p:commandButton value="Login" action="#{authenticationBean.login}"
-				update="grid msgs" styleClass="mr-2" />
+				update="grid msgs" styleClass="mr-2" validateClient="true"
+				process="@form" />
 
 		</h:form>
 	</div>
