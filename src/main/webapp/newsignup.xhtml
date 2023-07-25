@@ -1,0 +1,161 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+    	<style>
+		    .label {
+		        width: 20%;
+		        padding: 4px;
+		    }
+		
+		    .value {
+		        width: 80%;
+		        padding: 4px;
+		    }
+		
+		    .grid {
+		        width: 100%;
+		    }
+		
+		    .error {
+		        color: red;
+		    }
+		
+		    .outputLabel {
+		        font-weight: bold;
+		    }
+		
+		    .grid {
+		        width: 33%;
+		        padding: 4px;
+		    }
+		</style>
+    </h:head>
+
+    <h:body>
+	    <div class="card">
+    	<h:form>
+
+        <p:growl id="growl" sticky="false" showDetail="true"/>
+
+        <p:wizard flowListener="#{newSignupWizard.onFlowProcess}">
+            <p:tab id="personal" title="Personal">
+                <p:panel header="Personal Details">
+                    <p:messages/>
+                    <h:panelGrid columns="2" columnClasses="label, value">
+                        <h:outputText value="Firstname: *"/>
+                        <p:inputText value="#{newSignupWizard.newSignupBean.firstname}" required="true" label="Firstname"/>
+
+                        <h:outputText value="Lastname: *"/>
+                        <p:inputText value="#{newSignupWizard.newSignupBean.lastname}" required="true" label="Lastname"/>
+                		
+			            <p:outputLabel for="birthDate" value="BirthDate"/>
+                		<p:datePicker id="birthDate" value="#{newSignupWizard.newSignupBean.birthDate}" pattern="MM/dd/yyyy" 
+                		              maxdate="#{newSignupWizard.newSignupBean.maxDate}" readonlyInput="true"
+                		              monthNavigator="true" yearNavigator="true">
+			            <p:ajax event="dateSelect" listener="#{newSignupWizard.onDateSelect}"
+                            update="growl age"/>
+                        </p:datePicker>
+                        <h:outputText value="Age: "/>
+                        <p:inputText id="age"  value="#{newSignupWizard.newSignupBean.age}"/>
+                        
+                        <h:outputText value="Email: *"/>
+                        <p:inputText value="#{newSignupWizard.newSignupBean.email}" required="true" label="Email"/>
+                        
+                        <h:outputText value="Skip to last: "/>
+                        <h:selectBooleanCheckbox value="#{newSignupWizard.skip}"/>
+                    </h:panelGrid>
+                </p:panel>
+            </p:tab>
+
+            <p:tab id="address" title="Address">
+                <p:panel header="Address Details">
+                    <p:messages/>
+                    <h:panelGrid columns="2" columnClasses="label, value">
+                        <h:outputText value="Street: "/>
+                        <p:inputText value="#{newSignupWizard.newSignupBean.street}"/>
+                      
+                        <h:outputText value="City: "/>
+                        <p:selectOneMenu id="city" value="#{newSignupWizard.newSignupBean.city}" >
+		                    <p:ajax listener="#{newSignupWizard.onCityChange}" update="postal"/>
+		                    <f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true"/>
+		                    <f:selectItems value="#{newSignupWizard.newSignupBean.cities}"/>
+                		</p:selectOneMenu>
+                		
+                		<h:outputText value="Postal Code: "/>
+                        <p:inputText id="postal" value="#{newSignupWizard.newSignupBean.postalCode}"/>
+                		
+                        <h:outputText value="Skip to last: "/>
+                        <h:selectBooleanCheckbox value="#{newSignupWizard.skip}"/>
+                    </h:panelGrid>
+                </p:panel>
+            </p:tab>
+
+            <p:tab id="contact" title="Contact">
+                <p:panel header="Contact Information">
+                    <p:messages/>
+                    <h:panelGrid columns="2" columnClasses="label, value">
+
+                        <h:outputText value="Phone: "/>
+                        <p:inputText value="#{newSignupWizard.newSignupBean.phone}"/>
+
+                        <h:outputText value="Additional Info: "/>
+                        <p:inputText value="#{newSignupWizard.newSignupBean.info}"/>
+                    </h:panelGrid>
+                </p:panel>
+            </p:tab>
+
+            <p:tab id="confirm" title="Confirmation">
+                <p:panel header="Confirmation">
+                    <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <h:outputText value="Firstname: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.firstname}" styleClass="outputLabel"/>
+
+                            <h:outputText value="Lastname: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.lastname}" styleClass="outputLabel"/>
+
+   							<h:outputText value="Email: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.email}" styleClass="outputLabel"/>
+                          
+                            <h:outputText value="Age: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.age}" styleClass="outputLabel"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" columnClasses="label, value">
+                            <h:outputText value="Street: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.street}" styleClass="outputLabel"/>
+
+                            <h:outputText value="Postal: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.postalCode}" styleClass="outputLabel"/>
+
+                            <h:outputText value="City: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.city}" styleClass="outputLabel"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" columnClasses="label, value">
+
+                            <h:outputText value="Phone "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.phone}" styleClass="outputLabel"/>
+
+                            <h:outputText value="Info: "/>
+                            <h:outputText value="#{newSignupWizard.newSignupBean.info}" styleClass="outputLabel"/>
+
+                            <h:outputText/>
+                            <h:outputText/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <p:commandButton value="Submit" action="#{newSignupWizard.save}" update="growl" process="@all"/>
+                </p:panel>
+            </p:tab>
+        </p:wizard>
+
+    </h:form>
+	</div>
+    </h:body>
+</html>
+

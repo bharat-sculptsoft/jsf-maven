@@ -12,6 +12,7 @@ public class Constant {
 	public static final String PERISTANCE_UNIT_NAME = "jsf-maven-project";
 
 	public static final String SUCCESS_PAGE_REDIRECT_URL = "success?faces-redirect=true";
+	public static final String CONFIRM_PAGE_REDIRECT_URL = "success?faces-redirect=true";
 	public static final String LOGIN_PAGE_REDIRECT_URL = "login?faces-redirect=true";
 
 	public static final String EMAIL_REGEX = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
