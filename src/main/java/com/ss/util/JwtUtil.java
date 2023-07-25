@@ -23,7 +23,8 @@ public class JwtUtil {
 	private static final long EXPIRATION_TIME = (5 * 60 * 60 * 1000); // 5 hours
 
 	public static String generateToken(String subject) {
-		return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+		return Jwts.builder()
+				.setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).signWith(getKey()).compact();
 	}
 
@@ -31,13 +32,6 @@ public class JwtUtil {
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
 
 	}
-
-	public String getSubject(String token) {
-		Claims claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token).getBody();
-
-		return claims.getSubject();
-	}
-
 	public static boolean validateToken(String token) {
 
 		try {
@@ -49,19 +43,19 @@ public class JwtUtil {
 		}
 	}
 
-	public String getUserNameFromToken(String token) {
+	public static String getSubjectFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
 
-	public String getIssuerFromToken(String token) {
+	public static String getIssuerFromToken(String token) {
 		return getClaimFromToken(token, Claims::getIssuer);
 	}
 
-	public Date getExpirationDateFromToken(String token) {
+	public static Date getExpirationDateFromToken(String token) {
 		return getClaimFromToken(token, Claims::getExpiration);
 	}
 
-	public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+	public static <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
 		final Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
 		return claimsResolver.apply(claims.getBody());
 	}

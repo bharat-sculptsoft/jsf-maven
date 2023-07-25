@@ -1,41 +1,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:f="http://xmlns.jcp.org/jsf/core"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-    </h:head>
+<h:head>
+</h:head>
 
-    <h:body>
-<!--         <p:spinner /> -->
-<!--          <p:inputText id="email1" styleClass="w-full mb-3"/> -->
-<!--           <p:selectBooleanCheckbox id="rememberme" styleClass="mr-2"/> -->
-<!--           <label for="rememberme">Remember me</label> -->
-<!--              <p:commandButton type="button" value="Sign In" icon="pi pi-user" styleClass="w-full"/> -->
-             
-             
-             <div class="card">
-    <h:form>
-        <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
-            <p:outputLabel for="firstname" value="Firstname:"/>
-            <p:inputText id="firstname" value="#{signupBean.firstname}"/>
+<h:body>
+	<!--         <p:spinner /> -->
+	<!--          <p:inputText id="email1" styleClass="w-full mb-3"/> -->
+	<!--           <p:selectBooleanCheckbox id="rememberme" styleClass="mr-2"/> -->
+	<!--           <label for="rememberme">Remember me</label> -->
+	<!--              <p:commandButton type="button" value="Sign In" icon="pi pi-user" styleClass="w-full"/> -->
 
-            <p:outputLabel for="middle" value="Middle:"/>
-            <p:inputText id="middle" value="#{signupBean.middlename}"/>
 
-            <p:outputLabel for="surname" value="Surname:"/>
-            <p:inputText id="surname" value="#{signupBean.lastname}" required="true"
-                         requiredMessage="Surname is required">
-                          <f:validateLength minimum="2"/>
-            </p:inputText>
-        </h:panelGrid>
+	<div class="card">
+		<h:form>
+			<h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
+				<p:outputLabel for="firstname" value="Firstname:" />
+				<p:inputText id="firstname" value="#{signupBean.firstname}" />
 
-        <p:commandButton value="Save" id="btnAll" process="@all" update="grid msgs" action="#{signupBean.save}" styleClass="mr-2"/>
-       
+				<p:outputLabel for="middle" value="Middle:" />
+				<p:inputText id="middle" value="#{signupBean.middlename}" />
 
-        <p:messages id="msgs"/>
-    </h:form>
-</div>
-    </h:body>
+				<p:outputLabel for="surname" value="Surname:" />
+				<p:inputText id="surname" value="#{signupBean.lastname}"
+					required="true" requiredMessage="Surname is required">
+					<f:validateLength minimum="2" />
+				</p:inputText>
+			</h:panelGrid>
+
+			<p:commandButton value="Save" id="btnAll" process="@all"
+				update="grid msgs" action="#{signupBean.save}" styleClass="mr-2" />
+
+
+			<p:messages id="msgs" />
+		</h:form>
+	</div>
+</h:body>
 </html>

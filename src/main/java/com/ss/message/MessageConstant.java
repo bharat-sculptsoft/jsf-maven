@@ -13,8 +13,6 @@ public class MessageConstant {
 	public static final String USER_NOT_FOUND = "user.data.not.found";
 	public static final String USER_DATA_FETCH_FAIL = "user.data.fetch.fail";
 	public static final String USER_DATA_SAVE_FAIL = "user.data.save.fail";
-
 	public static final String INCORRECT_USERNAME_PASSWORD = "incorrect.username.or.password";
-
 	public static final String USER_ALREADY_EXISTS = "user.already.exists";
 }

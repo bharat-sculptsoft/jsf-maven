@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import com.ss.exception.DaoLayerException;
 import com.ss.message.Constant;
 import com.ss.message.MessageConstant;
