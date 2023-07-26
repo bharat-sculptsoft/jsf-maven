@@ -1,7 +1,6 @@
 package com.ss.filter;
 
 import java.io.IOException;
-
 import java.util.Arrays;
 
 import javax.servlet.Filter;
@@ -72,9 +71,12 @@ public class JwtFilter implements Filter {
 		String loginURL = httpRequest.getContextPath() + "/login";
 		String loginHtmlURL = httpRequest.getContextPath() + "/login.xhtml";
 		String signupURL = httpRequest.getContextPath() + "/newsignup";
-
+		
+		//themeURL need to skip because its required to load html,js,css content
+		String themeURL = httpRequest.getContextPath() + "/javax.faces.resource";
+		
 		return (httpRequest.getRequestURI().equals(defaultURL) || httpRequest.getRequestURI().equals(loginURL)
-				|| httpRequest.getRequestURI().equals(loginHtmlURL) || httpRequest.getRequestURI().equals(signupURL));
+				|| httpRequest.getRequestURI().equals(loginHtmlURL) || httpRequest.getRequestURI().equals(signupURL) || httpRequest.getRequestURI().contains(themeURL));
 
 	}
 

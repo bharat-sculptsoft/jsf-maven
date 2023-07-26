@@ -16,17 +16,18 @@
 		<h:form id="form-id">
 			<p:messages id="msgs" />
 
-			<p:panelGrid id="grid" cellpadding="7" columns="2">
+			<p:panelGrid id="grid" cellpadding="7" columns="3">
 				<p:outputLabel for="email-id" value="Email:" />
 				<p:inputText id="email-id" value="#{authenticationBean.email}"
 					a:placeholder="Enter your email." required="true"
 					requiredMessage="Email is required" />
-
+				<p:message for="email-id"/>
 
 				<p:outputLabel for="pwd-id" value="Password:" />
 				<p:password id="pwd-id" label="Password"
 					value="#{authenticationBean.password}"
 					a:placeholder="Enter your password." />
+				<p:message for="pwd-id" />
 
 			</p:panelGrid>
 
