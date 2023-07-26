@@ -7,7 +7,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
 import com.ss.exception.DaoLayerException;
 import com.ss.message.Constant;
@@ -20,7 +19,6 @@ import lombok.Data;
 @ManagedBean(name = "userDao")
 @ApplicationScoped
 @Data
-@Transactional
 public class UserDaoImpl implements UserDao {
 
 	@Override
