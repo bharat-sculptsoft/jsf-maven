@@ -1,14 +1,21 @@
 package com.ss.util;
 
 import java.security.Key;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.ss.message.Constant;
+import com.ss.user.web.MenuBean;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -21,10 +28,17 @@ public class JwtUtil {
 	private static final String SECRET_KEY = "daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb";
 
 	private static final long EXPIRATION_TIME = (5 * 60 * 60 * 1000); // 5 hours
-
-	public static String generateToken(String subject) {
+	private static final Logger logger = LogManager.getLogger(JwtUtil.class);
+	public static String generateToken(String subject,Long roleId) {
+		// Create a map to store subject and roleId
+		logger.info("In generateToken");
+		logger.debug("generateToken " +subject +" "+roleId);
+	    Map<String, Object> claims = new HashMap<>();
+	    claims.put("subject", subject);
+	    claims.put("roleId", roleId);
 		return Jwts.builder()
-				.setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setClaims(claims) // Set the map as the JWT claims
+				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).signWith(getKey()).compact();
 	}
 
@@ -59,7 +73,20 @@ public class JwtUtil {
 		final Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
 		return claimsResolver.apply(claims.getBody());
 	}
-
+	public static Claims getClaimFromToken(String jwtToken) {
+		logger.debug("In getClaimFromToken "+jwtToken +" "+Jwts.parserBuilder()
+        .setSigningKey(getKey())
+        .build()
+        .parseClaimsJws(jwtToken)
+        .getBody());
+		return Jwts.parserBuilder()
+	            .setSigningKey(getKey())
+	            .build()
+	            .parseClaimsJws(jwtToken)
+	            .getBody();
+         
+	    // Do something with subject and roleId...
+	}
 	public static void storeTokenInCookie(String token) {
 		// Store the token on the client side (e.g., in a cookie)
 		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()

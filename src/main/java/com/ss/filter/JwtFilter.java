@@ -41,8 +41,7 @@ public class JwtFilter implements Filter {
 			}
 			String token = extractTokenFromRequest(httpRequest);
 			if (token != null && JwtUtil.validateToken(token)) {
-
-				httpRequest.setAttribute(Constant.USER_PALYLOAD,JwtUtil.getSubjectFromToken(token));
+				httpRequest.setAttribute(Constant.USER_PALYLOAD,JwtUtil.getClaimFromToken(token));
 				// Token is valid, proceed with the request
 				chain.doFilter(request, response);
 			} else {
@@ -57,6 +56,7 @@ public class JwtFilter implements Filter {
 			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.xhtml");
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			MessageProvider.getMessageString(MessageConstant.JWT_INVALID_TOKEN, null, httpRequest.getLocale());
 			// httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
 			httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.xhtml");
