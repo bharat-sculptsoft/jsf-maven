@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 			User user = userDao.findByEmail(email);
 
 			if (null != user && PasswordHashingUtil.match(password, user.getPassword())) {
-				String token = JwtUtil.generateToken(user.getEmail());
+				String token = JwtUtil.generateToken(user.getEmail(),user.getRole());
 				JwtUtil.storeTokenInCookie(token);
 				return true;
 			} else {

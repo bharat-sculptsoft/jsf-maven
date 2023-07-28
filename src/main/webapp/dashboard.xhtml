@@ -11,15 +11,14 @@
 	<title>Digi Card</title>
 </h:head>
 
-<h:body>
- 		<div style="display: flex;">
+<h:body onload="selectMenu('dashboard')">
+		<div style="display: flex;">
             <!-- Left side: PrimeFaces menu -->
-            <ui:include src="signupsuccess.xhtml" />
+            <ui:include src="signupsuccess.xhtml"/>
 
             <!-- Right side: Output label or message -->
-            <h:outputLabel value="Welcome, in Card" style="margin-right: 10px;" />
-        </div>
-		
+            <h:outputLabel value="Welcome, in Dashboard" style="margin-right: 10px;" />
+        </div>		
 		<h:form>
 	
 		</h:form>

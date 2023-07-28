@@ -31,7 +31,7 @@ public class SignupBean implements Serializable {
   private Date birthdate;
   private String gender;
   private String address;
-
+  
   @ManagedProperty(value = "#{userService}")
   private UserService userService;
 

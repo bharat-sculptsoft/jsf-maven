@@ -4,14 +4,46 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:c="http://java.sun.com/jsf/core"
-	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>User Login</title>
+	<title>User Logged In</title>
+	 <style>
+        .custom-menu .ui-menu-child {
+            max-height: none; /* Remove the max-height to show all items without scroll */
+            overflow-y: hidden;
+        }
+
+        .custom-menu .ui-slidemenu-content {
+            max-height: 600px; /* Adjust the max height of the menu box as per your requirement */
+            overflow-y: auto;
+        }
+        .menuSelected {
+		    text-decoration: none;
+		    background-color: orange;
+		}
+    </style>
+   
+
 </h:head>
 
 <h:body>
-	<h:messages/>
-		<h5>User Signup Scuccessfully</h5>
+    <script type="text/javascript">
+    function selectMenu(element) {
+        var menuItems = document.querySelectorAll('.ui-menuitem-link');
+        console.dir(menuItems);
+        menuItems.forEach(function(menuItem) {
+          if (menuItem.innerText.toLowerCase() === element.toLowerCase()) {
+            menuItem.classList.add('menuSelected');
+          } else {
+            menuItem.classList.remove('menuSelected');
+          }
+        });
+      }    
+    </script>
+    <h:form>
+        <p:slideMenu widgetVar="slideMenu1" id="slideMenu" model="#{menuBean.menuModel}" styleClass="custom-menu" />
+        <h:commandButton value="Log Out" icon="pi pi-check" action="#{authenticationBean.logout}" styleClass="mt-3" />
+    </h:form>
 </h:body>
 
 </html>
