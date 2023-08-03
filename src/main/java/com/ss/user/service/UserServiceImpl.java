@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
 	@ManagedProperty(value = "#{userDao}")
 	private UserDao userDao;
-	
+
 	public UserDao getUserDao() {
 		return userDao;
 	}
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 			User user = userDao.findByEmail(entityManager, email);
 
 			if (null != user && PasswordHashingUtil.match(password, user.getPassword())) {
-				String token = JwtUtil.generateToken(user.getEmail(),user.getRole());
+				String token = JwtUtil.generateToken(user.getEmail(), user.getRole());
 				JwtUtil.storeTokenInCookie(token);
 				return true;
 			} else {

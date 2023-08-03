@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<title>User Registration Form</title>
+	<style>
+/* Style for the center panel */
+.panel {
+	width: 400px;
+	margin: 0 auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the tabbed navigation */
+.tab-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.tab {
+	flex: 1;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px 5px 0 0;
+	cursor: pointer;
+}
+
+.tab.active {
+	background-color: #007bff;
+	color: #fff;
+}
+
+/* Style for the form elements */
+.form-label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.form-input {
+	width: 100%;
+	padding: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+.form-textarea {
+	width: 100%;
+	padding: 5px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	resize: vertical;
+}
+
+.form-button {
+	display: block;
+	width: 100%;
+	padding: 8px 12px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.form-button:hover {
+	background-color: #0056b3;
+}
+</style>
+</h:head>
+<h:body>
+	<div class="panel">
+		<div class="tab-container">
+			<div class="tab active" onclick="showTab('tab1')">Tab 1</div>
+			<div class="tab" onclick="showTab('tab2')">Tab 2</div>
+		</div>
+		<h:form id="form">
+			<div id="tab1">
+
+				<h:outputLabel class="form-label" for="name-id">User Name:</h:outputLabel>
+				<h:inputText id="name-id" value="#{basicSignupBean.name}"
+					class="form-input" />
+
+				<h:outputLabel class="form-label" for="email-id">Your Email:</h:outputLabel>
+				<h:inputText id="email-id" value="#{basicSignupBean.email}"
+					class="form-input" />
+
+				<h:outputLabel class="form-label" for="password-id">Password :</h:outputLabel>
+				<h:inputSecret id="password-id" value="#{basicSignupBean.password}"
+					class="form-input" />
+
+				<h:outputLabel class="form-label" for="phone-id">Phone Number:</h:outputLabel>
+				<h:inputText id="phone-id" value="#{basicSignupBean.phonenumber}"
+					class="form-input" />
+
+			</div>
+			<div id="tab2" style="display: none;">
+				<h:outputLabel class="form-label" for="gender">Gender:</h:outputLabel>
+				<h:selectOneRadio value="#{basicSignupBean.gender}">
+					<f:selectItem itemValue="Male" itemLabel="Male" />
+					<f:selectItem itemValue="Female" itemLabel="Female" />
+				</h:selectOneRadio>
+
+				<h:outputLabel class="form-label" for="address">Address:</h:outputLabel>
+				<h:inputTextarea value="#{basicSignupBean.address}" cols="50"
+					rows="5" class="form-textarea" />
+
+			</div>
+			<h:commandButton value="Submit" action="#{basicSignupBean.signup}"
+				class="form-button" />
+		</h:form>
+	</div>
+
+	<!-- JavaScript code here -->
+	<script type="text/javascript">
+    //<![CDATA[
+    function showTab(tabId) {
+      var tabs = document.querySelectorAll('.tab');
+      var tabContents = document.querySelectorAll('div[id^="tab"]');
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+      }
+      for (var i = 0; i < tabContents.length; i++) {
+        tabContents[i].style.display = 'none';
+      }
+      document.querySelector('#' + tabId).style.display = 'block';
+      event.currentTarget.classList.add('active');
+    }
+    //]]>
+  </script>
+</h:body>
+</html>

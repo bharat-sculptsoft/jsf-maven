@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<style>
+/* CSS styles for the page */
+.card {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 20px;
+	margin: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.products-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.products-table th, .products-table td {
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+
+.products-table th {
+	font-weight: bold;
+}
+
+.filter-container {
+	position: relative;
+	display: inline-block;
+	float: right;
+}
+
+.filter-container i {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	color: #aaa;
+}
+
+.search-container {
+	position: relative;
+	display: inline-block;
+	float: right;
+}
+
+.search-icon {
+	position: absolute;
+	top: 8px;
+	left: 140px;
+}
+
+.dialog {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	padding: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dialog-header {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.dialog-footer {
+	text-align: right;
+	margin-top: 20px;
+}
+
+.form-button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.form-button:hover {
+	background-color: #0056b3;
+}
+
+.ui-button-success {
+	background-color: #28a745;
+}
+
+.ui-button-warning {
+	background-color: #ffc107;
+}
+
+.ui-button-secondary {
+	background-color: #6c757d;
+}
+</style>
+</h:head>
+<h:body onload="hidDialog()">
+	<div class="card crud-demo">
+		<h:form id="form" method="post">
+			<div id="messages">
+				<!-- Growl messages (You can display messages here using JavaScript) -->
+			</div>
+``
++\            <span style="font-weight: bold">PRODUCTS</span>
+			<span class="search-container ui-input-icon-right"> <i
+				class="pi pi-search search-icon"></i> <h:inputText
+					placeholder="Search" value="#{crudView.searchQuery}"
+					styleClass="search-input">
+					<f:ajax event="keyup" listener="#{crudView.filterProducts}"
+						execute="@this" render="dt-products pagination" />
+				</h:inputText>
+			</span>
+			<h:dataTable id="dt-products" value="#{crudView.filteredProducts}"
+				class="products-table" var="product">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText />
+					</f:facet>
+					<h:selectBooleanCheckbox />
+				</h:column>
+				<input type="checkbox" />
+				<h:column>
+					<f:facet name="header">Code</f:facet>
+                #{product.code}
+            </h:column>
+				<h:column>
+					<f:facet name="header">Name</f:facet>
+                #{product.name}
+            </h:column>
+				<h:column>
+					<f:facet name="header">Price</f:facet>
+                $#{product.price}
+            </h:column>
+				<h:column>
+					<f:facet name="header">Category</f:facet>
+                #{product.category}
+            </h:column>
+				<h:column>
+					<f:facet name="header">Reviews</f:facet>
+                #{product.rating}
+            </h:column>
+				<h:column>
+					<f:facet name="header">Action</f:facet>
+					<h:commandButton value="Edit" styleClass="edit-button"
+						action="#{crudView.selectProduct(product)}">
+						<f:ajax onevent="showDialogAndSelectProduct('#{product}')"
+							render="@form" />
+					</h:commandButton>
+					<h:commandButton value="Delete" styleClass="delete-button"
+						action="#{crudView.deleteProduct(product)}">
+					</h:commandButton>
+				</h:column>
+			</h:dataTable>
+			<!-- Pagination controls -->
+			<h:panelGroup id="pagination" layout="block"
+				style="margin-top: 10px;">
+				<h:outputText value="Page: " />
+				<h:outputText
+					value="#{crudView.currentPage}/#{crudView.getTotalPages()}" />
+				<span class="filter-container ui-input-icon-right"> <h:commandLink
+						value="First" action="#{crudView.goToPage(1)}"
+						rendered="#{crudView.currentPage > 1}" /> <h:outputText
+						value="  " rendered="#{crudView.currentPage > 1}" /> <h:commandLink
+						value="Previous" action="#{crudView.previousPage()}"
+						rendered="#{crudView.currentPage > 1}" /> <h:outputText
+						value="  " rendered="#{crudView.currentPage > 1}" /> <h:commandLink
+						value="Next" action="#{crudView.nextPage()}"
+						rendered="#{crudView.currentPage != crudView.getTotalPages()}" />
+					<h:outputText value="  " /> <h:commandLink value="Last"
+						action="#{crudView.goToPage(crudView.getTotalPages())}"
+						rendered="#{crudView.currentPage != crudView.getTotalPages()}" />
+				</span>
+			</h:panelGroup>
+
+			<!-- Edit Dialog -->
+			<div id="editDialog" class="modal">
+				<h2>Edit User</h2>
+				<h:panelGrid id="dialogPanel" columns="2" cellpadding="5">
+					<h:outputLabel for="code">Code:</h:outputLabel>
+					<h:inputText id="code" value="#{crudView.selectedProduct.code}" />
+					<h:outputLabel for="name">Name:</h:outputLabel>
+					<h:inputText id="name" value="#{crudView.selectedProduct.name}" />
+					<h:outputLabel for="price">Price:</h:outputLabel>
+					<h:inputText id="price" value="#{crudView.selectedProduct.price}" />
+					<h:outputLabel for="category">Category:</h:outputLabel>
+					<h:selectOneRadio id="category"
+						value="#{crudView.selectedProduct.category}" layout="responsive"
+						columns="2">
+						<f:selectItem itemLabel="Accessories" itemValue="Accessories" />
+						<f:selectItem itemLabel="Clothing" itemValue="Clothing" />
+						<f:selectItem itemLabel="Electronics" itemValue="Electronics" />
+						<f:selectItem itemLabel="Fitness" itemValue="Fitness" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+				<h:commandButton value="Save" action="#{crudView.saveNewProduct()}"
+					styleClass="save-button"
+					onclick="document.getElementById('editDialog').style.display='none';"
+					update="dt-products " />
+				<h:commandButton value="Cancel" styleClass="cancel-button"
+					onclick="document.getElementById('editDialog').style.display='none';" />
+			</div>
+		</h:form>
+	</div>
+
+	<!--     <div id="dialogs"> -->
+	<!--         Product Details Dialog -->
+	<!--         <div class="dialog" id="manageProductDialog"> -->
+	<!--             <div class="dialog-header">Product Details</div> -->
+	<!--             <div class="dialog-content ui-fluid"> -->
+	<!--                 Product details content here -->
+	<!--                 The content will be dynamically populated using JavaScript -->
+	<!--             </div> -->
+	<!--             <div class="dialog-footer"> -->
+	<!--                 <button type="button" class="ui-button ui-button-success" onclick="saveProduct()">Save</button> -->
+	<!--                 <button type="button" class="ui-button ui-button-secondary" onclick="hideManageProductDialog()">Cancel</button> -->
+	<!--             </div> -->
+	<!--         </div> -->
+	<!--     </div> -->
+
+	<script>
+   	function hidDialog(){
+   	//	alert('hide');
+   		document.getElementById('editDialog').style.display = 'none';
+   	}
+    function showDialogAndSelectProduct(product) {
+        // Show the dialog
+   //    alert(product);
+        document.getElementById('editDialog').style.display = 'block';
+//         Call the managed bean method to select the product
+//         Assuming you have a `selectProduct` method in the managed bean (crudView)
+//         You can use AJAX to call the method to avoid page refresh
+//        var form = document.getElementById('editDialogForm');
+//        form.elements['selectedProduct'].value = product;
+//        form.submit();
+     // Set the hidden input value to the selected product
+        //document.getElementById('editDialogForm:selectedProduct').value = product;
+
+        // Submit the form to call the managed bean method
+      //  document.getElementById('editDialogForm').submit();
+        
+    }
+</script>
+</h:body>
+</html>
