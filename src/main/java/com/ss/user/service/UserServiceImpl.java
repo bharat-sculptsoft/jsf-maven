@@ -4,6 +4,7 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import com.ss.message.MessageConstant;
 import com.ss.message.MessageProvider;
 import com.ss.user.dao.UserDao;
 import com.ss.user.entity.User;
+import com.ss.util.HibernateUtil;
 import com.ss.util.JwtUtil;
 import com.ss.util.PasswordHashingUtil;
 
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean authenticate(String email, String password) throws ServiceLayerException {
-
+		EntityManager entityManager = null;
 		try {
 			logger.trace("We've just greeted the user!");
 			logger.debug("We've just greeted the user! 1");
@@ -49,10 +51,12 @@ public class UserServiceImpl implements UserService {
 			logger.warn("We've just greeted the user!");
 			logger.error("We've just greeted the user!");
 			logger.fatal("We've just greeted the user!");
-			User user = userDao.findByEmail(email);
+			entityManager = HibernateUtil.getEntityManager();
+
+			User user = userDao.findByEmail(entityManager, email);
 
 			if (null != user && PasswordHashingUtil.match(password, user.getPassword())) {
-				String token = JwtUtil.generateToken(user.getEmail());
+				String token = JwtUtil.generateToken(user.getEmail(), user.getRole());
 				JwtUtil.storeTokenInCookie(token);
 				return true;
 			} else {
@@ -60,20 +64,24 @@ public class UserServiceImpl implements UserService {
 						MessageProvider.getMessageString(MessageConstant.INCORRECT_USERNAME_PASSWORD, null));
 			}
 
-		} catch (DaoLayerException | ValidationFailedException e) {
-			e.printStackTrace();
-			throw new ServiceLayerException(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
+			if (e instanceof ValidationFailedException || e instanceof DaoLayerException) {
+				throw new ServiceLayerException(e.getMessage());
+			}
 			throw new ServiceLayerException(
 					MessageProvider.getMessageString(MessageConstant.INTERNAL_SERVER_ERROR, null));
+		} finally {
+			HibernateUtil.closeEntityManager(entityManager);
 		}
 
 	}
 
 	@Override
 	public void logoutUser() throws ServiceLayerException {
+
 		try {
+
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpServletResponse httpServletResponse = (HttpServletResponse) context.getExternalContext().getResponse();
 			JwtUtil.removeTokenfromCookie(httpServletResponse);
@@ -86,22 +94,36 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	// @Transactional
 	public void signUp(User user) throws ServiceLayerException {
+		EntityManager entityManager = null;
+
 		try {
-			User userDetails = userDao.findByEmail(user.getEmail());
+			entityManager = HibernateUtil.getEntityManager();
+			// begin transaction
+			HibernateUtil.beginTransaction(entityManager);
+
+			User userDetails = userDao.findByEmail(entityManager, user.getEmail());
 			if (null != userDetails) {
 				throw new ValidationFailedException(MessageProvider
 						.getMessageString(MessageConstant.USER_ALREADY_EXISTS, new Object[] { user.getEmail() }));
 			}
-			userDao.save(user);
-		} catch (DaoLayerException | ValidationFailedException e) {
-			e.printStackTrace();
-			throw new ServiceLayerException(e.getMessage());
+			userDao.save(entityManager, user);
+
+			// commit transaction
+			HibernateUtil.commitTransaction(entityManager);
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			// rollback transaction
+			HibernateUtil.rollbackTransaction(entityManager);
+
+			if (e instanceof ValidationFailedException || e instanceof DaoLayerException) {
+				throw new ServiceLayerException(e.getMessage());
+			}
 			throw new ServiceLayerException(
 					MessageProvider.getMessageString(MessageConstant.INTERNAL_SERVER_ERROR, null));
+		} finally {
+			HibernateUtil.closeEntityManager(entityManager);
 		}
 	}
 }

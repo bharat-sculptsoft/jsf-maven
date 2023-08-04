@@ -7,12 +7,15 @@
     <h:head>
     	<style>
 		    .label {
-		        width: 20%;
+		        width: 30%;
 		        padding: 4px;
 		    }
-		
 		    .value {
-		        width: 80%;
+		        width: 30%;
+		        padding: 4px;
+		    }
+		    .Message {
+		        width: 30%;
 		        padding: 4px;
 		    }
 		
@@ -37,21 +40,33 @@
 
     <h:body>
 	    <div class="card">
-    	<h:form>
+    	<h:form enctype="multipart/form-data">
 
-        <p:growl id="growl" sticky="false" showDetail="true"/>
-
+        <p:growl id="growl" sticky="false" showDetail="true" />
+		  <p:slideMenu style="width:200px">
+            <p:submenu label="Options">
+                <p:menuitem value="Save (Non-Ajax)"  action="#{newSignupWizard.saveMenu}" update="growl" ajax="false"
+                            icon="pi pi-save"/>
+                <p:menuitem value="Update" action="#{newSignupWizard.update}" update="growl" icon="pi pi-refresh"/>
+                <p:menuitem value="Delete" action="#{newSignupWizard.delete}" update="growl" icon="pi pi-times"/>
+            </p:submenu>
+            <p:submenu label="Navigations">
+                <p:menuitem value="Website" url="http://www.primefaces.org" icon="pi pi-external-link"/>
+<!--                 <p:menuitem value="Internal" outcome="/ui/menu/menubar" icon="pi pi-upload"/> -->
+            </p:submenu>
+        </p:slideMenu>
         <p:wizard flowListener="#{newSignupWizard.onFlowProcess}">
             <p:tab id="personal" title="Personal">
                 <p:panel header="Personal Details">
-                    <p:messages/>
-                    <h:panelGrid columns="2" columnClasses="label, value">
+                    <h:panelGrid columns="3" columnClasses="label, value, Message">
                         <h:outputText value="Firstname: *"/>
-                        <p:inputText value="#{newSignupWizard.newSignupBean.firstname}" required="true" label="Firstname"/>
-
+                        <p:inputText id="firstname" value="#{newSignupWizard.newSignupBean.firstname}" required="true" label="Firstname"/>
+                        <p:message for="firstname" display="Firstname" closable="true"/>
+                        
                         <h:outputText value="Lastname: *"/>
-                        <p:inputText value="#{newSignupWizard.newSignupBean.lastname}" required="true" label="Lastname"/>
-                		
+                        <p:inputText id="lastname" value="#{newSignupWizard.newSignupBean.lastname}" required="true" label="Lastname"/>
+                		<p:message for="lastname" display="Firstname" closable="true"/>
+                		 
 			            <p:outputLabel for="birthDate" value="BirthDate"/>
                 		<p:datePicker id="birthDate" value="#{newSignupWizard.newSignupBean.birthDate}" pattern="MM/dd/yyyy" 
                 		              maxdate="#{newSignupWizard.newSignupBean.maxDate}" readonlyInput="true"
@@ -59,15 +74,60 @@
 			            <p:ajax event="dateSelect" listener="#{newSignupWizard.onDateSelect}"
                             update="growl age"/>
                         </p:datePicker>
+                        <p:message for="birthDate" display="BirthDate" closable="true"/>
+                        
                         <h:outputText value="Age: "/>
                         <p:inputText id="age"  value="#{newSignupWizard.newSignupBean.age}"/>
+                        <p:message for="age" display="Age" closable="true"/>
                         
-                        <h:outputText value="Email: *"/>
-                        <p:inputText value="#{newSignupWizard.newSignupBean.email}" required="true" label="Email"/>
-                        
+                        <h:outputText value="Documents: *"/>
+                        <p:fileUpload id="documents" label="Upload Multiple" value="#{newSignupWizard.newSignupBean.files}" mode="simple" skinSimple="true" multiple="true"
+		                      auto="true" update="growl" 
+		                      process="@this" listener="#{newSignupWizard.handleFilesUpload}" />
+                   		<p:message for="documents" display="Upload Multiple" closable="true"/>
+                   		
+                   		<h:outputText value="Document:"/>
+                        <p:fileUpload id="document" required="true"  label="Upload" value="#{newSignupWizard.newSignupBean.file}" mode="simple" skinSimple="true"/>
+		                <p:message for="document" display="Upload" closable="true"/>
+		                
+		                <p:selectBooleanCheckbox value="#{newSignupWizard.newSignupBean.dynamicAdd}" itemLabel="Add Email">
+		                	<p:ajax type="change" update="resolutionPower" />
+        				</p:selectBooleanCheckbox>
+        				<h:outputText value=" "/>
+        				<h:outputText value=" "/>
+        				
+		                <h:outputText value="Email: *"/>
+                        <p:inputText id="email" value="#{newSignupWizard.newSignupBean.email}" required="true" label="Email"/>
+                        <p:message for="email" display="Email" closable="true"/>
+						
                         <h:outputText value="Skip to last: "/>
-                        <h:selectBooleanCheckbox value="#{newSignupWizard.skip}"/>
+                        <h:selectBooleanCheckbox id="skip" value="#{newSignupWizard.skip}"/>
+                        <p:message for="skip" display="Skip" closable="true"/>
+                        
                     </h:panelGrid>
+                    <h:panelGrid id="resolutionPower" columns="3" columnClasses="label, value, Message">
+		                <h:outputText rendered="#{newSignupWizard.newSignupBean.dynamicAdd}" value="Additional Email: *"/>
+                        <p:inputText rendered="#{newSignupWizard.newSignupBean.dynamicAdd}" id="addEmail" value="#{newSignupWizard.newSignupBean.addEmail}" required="true" label="Additional Email"/>
+                        <p:message rendered="#{newSignupWizard.newSignupBean.dynamicAdd}" for="addEmail" display="Additional Email: *" closable="true"/>
+				    </h:panelGrid>   
+				     
+				     <h:panelGrid id="dynamicInput" columns="2" columnClasses="label, value"> 
+	         			<p:commandButton value="Add Input Box" actionListener="#{newSignupWizard.toggleInput}" 
+                         update="inputContainer" process="@this"/>
+                        <h:outputText value=" "/>
+                     </h:panelGrid> 
+                     <h:panelGrid id="inputContainer" columns="2" columnClasses="label, value"> 
+			            <ui:repeat value="#{newSignupWizard.newSignupBean.inputItems}" var="inputItem">
+			            	 <p:panel>
+                    			<h:panelGrid columns="2" columnClasses="label, value">
+					                <h:outputText value="#{inputItem.label}" />
+					                <p:inputText label="#{inputItem.label}"/>
+					            </h:panelGrid>
+                			</p:panel>    
+			            </ui:repeat>
+			            <h:outputText value=" "/>
+					 </h:panelGrid>
+						
                 </p:panel>
             </p:tab>
 
@@ -149,7 +209,7 @@
                         </h:panelGrid>
                     </h:panelGrid>
 
-                    <p:commandButton value="Submit" action="#{newSignupWizard.save}" update="growl" process="@all"/>
+                    <p:commandButton value="Submit" ajax="false"  action="#{newSignupWizard.save}" update="growl" process="@all"/>
                 </p:panel>
             </p:tab>
         </p:wizard>
