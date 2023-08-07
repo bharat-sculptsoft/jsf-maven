@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ss.message.Constant;
 import com.ss.message.MessageConstant;
 import com.ss.message.MessageProvider;
+import com.ss.util.CommonUtil;
 import com.ss.util.FileReaderWriterUtil;
 import com.ss.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -34,14 +35,19 @@ public class JwtFilter implements Filter {
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
     try {
-      String sessionToken = (String) httpRequest.getSession().getAttribute(Constant.SESSION_TOKEN_KEY);
+      String sessionToken =
+          (String) httpRequest.getSession().getAttribute(Constant.SESSION_TOKEN_KEY);
       String requestToken = httpRequest.getParameter(Constant.REQUEST_TOKEN_KEY);
+      
+      if(requestToken != null) {
+        requestToken = CommonUtil.encode(requestToken);
+      }
 
-      if(sessionToken != null && requestToken != null && sessionToken.equals(requestToken)) {
+      if (sessionToken != null && requestToken != null && sessionToken.equals(requestToken)) {
         FileReaderWriterUtil.writeRequestDetails(requestToken);
-      } else {
+      } else if (requestToken != null) {
         Boolean isContains = FileReaderWriterUtil.readRequestDetails(requestToken);
-        if(isContains.equals(Boolean.TRUE)) {
+        if (isContains.equals(Boolean.TRUE)) {
           httpRequest.getSession().setAttribute(Constant.SESSION_TOKEN_KEY, requestToken);
         }
       }

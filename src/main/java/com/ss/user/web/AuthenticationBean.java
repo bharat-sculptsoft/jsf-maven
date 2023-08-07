@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import com.ss.message.Constant;
 import com.ss.user.service.UserService;
+import com.ss.util.CommonUtil;
 import com.ss.util.FileReaderWriterUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,7 +38,7 @@ public class AuthenticationBean implements Serializable {
   public String login() {
     try {
       if (userService.authenticate(email, password)) {
-        return Constant.SUCCESS_PAGE_REDIRECT_URL;
+        return Constant.CONFIRM_PAGE_REDIRECT_URL;
       }
     } catch (Exception e) {
       FacesContext.getCurrentInstance().addMessage(null,
@@ -67,7 +68,9 @@ public class AuthenticationBean implements Serializable {
     ExternalContext externalContext = context.getExternalContext();
     Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
     String requestToken = requestParameterMap.get(Constant.REQUEST_TOKEN_KEY);
-  
+    if(requestToken != null) {
+      requestToken = CommonUtil.encode(requestToken);
+    }
     FileReaderWriterUtil.deleteRequestDetails(requestToken);
   }
 }
