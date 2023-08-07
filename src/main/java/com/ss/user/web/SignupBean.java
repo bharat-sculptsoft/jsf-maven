@@ -46,7 +46,7 @@ public class SignupBean implements Serializable {
       user.setAddress(address);
       userService.signUp(user);
 
-      return Constant.SIGNUP_SUCCESS_PAGE_REDIRECT_URL;
+      return Constant.WELCOME_PAGE_REDIRECT_URL;
     } catch (ServiceLayerException e) {
       FacesContext.getCurrentInstance().addMessage(null,
           new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));

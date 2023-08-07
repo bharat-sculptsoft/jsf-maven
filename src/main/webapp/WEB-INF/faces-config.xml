@@ -35,4 +35,11 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
+    
+    <!-- Protect the view pages with unique token -->
+    <protected-views>
+		<url-pattern>/login.xhtml</url-pattern>    	
+    	<url-pattern>/signup.xhtml</url-pattern>
+    	<url-pattern>/success.xhtml</url-pattern>
+    </protected-views>
 </faces-config>
