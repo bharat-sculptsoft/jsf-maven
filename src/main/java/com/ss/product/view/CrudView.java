@@ -1,5 +1,6 @@
 package com.ss.product.view;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,18 +10,21 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.PrimeFaces;
 
+import com.ss.exception.ServiceLayerException;
+import com.ss.message.Constant;
 import com.ss.product.service.ProductService;
 import com.ss.product.web.Product;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class CrudView implements Serializable {
 
 	/**
@@ -42,11 +46,19 @@ public class CrudView implements Serializable {
 	private ProductService productService;
 	private static final Logger logger = LogManager.getLogger(CrudView.class);
 	private String searchQuery = "";
+	private String sortField="code";
+	private String sortOrder = "asc"; // Default sort order
 
 	@PostConstruct
 	public void init() {
 		logger.info("CrudView init");
-		this.products = this.productService.getClonedProducts(100);
+	//	this.products = this.productService.getClonedProducts(100);
+		try {
+			this.products=this.productService.findAll();
+		} catch (ServiceLayerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		filteredProducts = new ArrayList<>(products); // Initially, both lists are the same
 		filterProducts();
 	}
@@ -67,8 +79,22 @@ public class CrudView implements Serializable {
 	}
 
 	public void selectProduct(Product selectedProduct) {
+		if(selectedProduct!=null && selectedProduct.getCode()!=null) {
 		logger.debug("selectProduct " + selectedProduct + " " + selectedProduct.getCode());
-		this.selectedProduct = selectedProduct;
+			this.selectedProduct = selectedProduct;
+		}else {
+			this.selectedProduct =new Product();
+		}
+		
+	}
+	public void editProduct(Product selectedProduct) {
+		if(selectedProduct!=null && selectedProduct.getCode()!=null) {
+		logger.debug("editProduct " + selectedProduct + " " + selectedProduct.getCode());
+			this.selectedProduct = selectedProduct;
+		}else {
+			this.selectedProduct =new Product();
+		}
+		redirectToPage("editproduct.xhtml");
 	}
 
 	public List<Product> getSelectedProducts() {
@@ -112,6 +138,14 @@ public class CrudView implements Serializable {
 		return currentPage;
 	}
 
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
 	}
@@ -122,6 +156,13 @@ public class CrudView implements Serializable {
 
 	public void setRowsPerPage(int rowsPerPage) {
 		this.rowsPerPage = rowsPerPage;
+	}
+	public String getSortField() {
+		return sortField;
+	}
+
+	public void setSortField(String sortField) {
+		this.sortField = sortField;
 	}
 
 	public void saveProduct() {
@@ -138,12 +179,40 @@ public class CrudView implements Serializable {
 	}
 
 	public void saveNewProduct() {
-		if (this.selectedProduct.getCode() == null) {
-			this.selectedProduct.setCode(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
+		logger.debug("saveNewProduct "+selectedProduct.toString());
+		if (this.selectedProduct.getId() == null) {
+			//this.selectedProduct.setId(1233);
+			try {
+				productService.save(this.selectedProduct);
+			} catch (ServiceLayerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.products.add(this.selectedProduct);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Added"));
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Updated"));
+			this.filteredProducts.add(this.selectedProduct);
+			filterProducts();
+			this.selectedProduct=new Product();
+			 // Add a success message
+	        FacesContext.getCurrentInstance().addMessage(null,
+	                new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "New product added."));
+
+	        // Redirect to the same page using PRG pattern
+	       
+	        redirectToPage(Constant.DataTable);
+		}
+	}
+	public void saveOrAddProduct() {
+		logger.debug("saveOrAddProduct "+selectedProduct.toString());
+		//if new record then save
+		if (this.selectedProduct.getId() == null) {
+			this.selectedProduct.setId(1233L);
+			this.products.add(this.selectedProduct);
+			this.filteredProducts.add(this.selectedProduct);
+			filterProducts();
+			redirectToPage(Constant.DataTable);
+		}else {
+			filterProducts();
+			redirectToPage(Constant.DataTable);
 		}
 	}
 
@@ -183,7 +252,19 @@ public class CrudView implements Serializable {
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
 		PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
 	}
+	 // Method to redirect back to the original page
+    public void redirectToPage(String pageURL) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
 
+        try {
+            // Redirect the user back to the original page
+            externalContext.redirect(pageURL);
+        } catch (IOException e) {
+            // Handle the exception if redirect fails
+            e.printStackTrace();
+        }
+    }
 	// Method to handle the filter action
 	public void filterProducts() {
 		// Perform filtering based on a search query or other criteria
@@ -202,13 +283,51 @@ public class CrudView implements Serializable {
 		}
 		logger.debug("search called size1: " + filteredProducts.size());
 		filteredSize = filteredProducts.size();
+		 // Apply sorting
+		//sortField="code"; sortOrder="asc";
+		logger.debug("filterProducts sortField"+sortField);
+	    if (sortField != null) {
+	        filteredProducts.sort((p1, p2) -> {
+	            int result;
+	            switch (sortField) {
+	                case "code":
+	                    result = p1.getCode().compareTo(p2.getCode());
+	                    break;
+	                case "name":
+	                    result = p1.getName().compareTo(p2.getName());
+	                    break;
+	                case "price":
+	                    result = ((Double)p1.getPrice()).compareTo((Double)p2.getPrice());
+	                    break;
+	                // Add more cases for other sortable fields as needed
+	                default:
+	                    result = 0; // Default to no sorting if the field is not recognized
+	                    
+	            }
+	            return "asc".equals(sortOrder) ? result : -result; // Reverse order for descending
+	        });
+	    }
 		int startIndex = (currentPage - 1) * rowsPerPage;
 		int endIndex = Math.min(startIndex + rowsPerPage, filteredProducts.size());
 		filteredProducts = new ArrayList<>(filteredProducts.subList(startIndex, endIndex));
-		// logger.debug("search called size 2: " +filteredProducts.size());
 	}
-	// Getters and setters...
+	 // Sorting logic for the data table
+    public void sort(String field) {
+        if (field == null || field.isEmpty()) {
+            return; // Invalid field, do nothing
+        }
 
+        // Toggle sort order if the same field is clicked again
+        if (field.equals(sortField)) {
+            sortOrder = "asc".equals(sortOrder) ? "desc" : "asc";
+        } else {
+            // New field for sorting, default to ascending order
+            sortOrder = "asc";
+        }
+        sortField = field;
+        logger.info("sortOrder: "+sortOrder+"sortField: "+sortField);
+        filterProducts();
+    }
 	public void nextPage() {
 		if (currentPage < getTotalPages()) {
 			currentPage++;
@@ -237,7 +356,7 @@ public class CrudView implements Serializable {
 		else
 			return (int) Math.ceil((double) filteredSize / rowsPerPage);
 	}
-
+	
 	@Override
 	public String toString() {
 		return "CrudView [products=" + products + ", selectedProduct=" + selectedProduct + ", selectedProducts="

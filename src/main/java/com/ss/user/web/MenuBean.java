@@ -58,13 +58,6 @@ public class MenuBean implements Serializable {
                         .value(subItem.getLabel())
                         .outcome(subItem.getUrl())// Use outcome for navigation
                         .build();
-//                if (subItem.getUrl().equals(getCurrentPage())) {
-//                	subMenuItem.setStyleClass("menuSelected");
-//                }
-                // Set the action for the menu item
-            //  subMenuItem.setCommand("#{menuBean.doSomething}");
-            //  subMenuItem.seton("selectMenu('"+subItem.getLabel()+"')");
-           //   subMenuItem.setOncomplete("selectMenu('"+subItem.getLabel()+"')");
               menuModel.getElements().add(subMenuItem);
             } else if (submenuItems.size() > 1) {
                 // If there are multiple submenu items, create a submenu and add submenu items to it
@@ -107,9 +100,11 @@ public class MenuBean implements Serializable {
             userMenuItems.add(new MenuItem("Dashboard", "/dashboard"));
             List<MenuItem> profileItems = new ArrayList<>();
             profileItems.add(new MenuItem("Profile", "/profile"));
+            List<MenuItem> tableItems = new ArrayList<>();
+            tableItems.add(new MenuItem("DataTable", "/datatable"));
             menuStructure.put("Dashboard", userMenuItems);
             menuStructure.put("Profile", profileItems);
-           
+            menuStructure.put("DataTable", tableItems);
         }
 
         // You can add more menu structures for other roles if needed
