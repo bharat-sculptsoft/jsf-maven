@@ -1,6 +1,7 @@
 package com.ss.filter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -68,6 +69,10 @@ public class JwtFilter implements Filter {
             httpRequest.getLocale());
         httpResponse.sendRedirect(httpRequest.getContextPath() + "/welcome.xhtml");
       }
+    } catch (UnsupportedEncodingException e) {
+      MessageProvider.getMessageString(MessageConstant.INTERNAL_SERVER_ERROR, null,
+          httpRequest.getLocale());
+      httpResponse.sendRedirect(httpRequest.getContextPath() + "/welcome.xhtml");
     } catch (ExpiredJwtException e) {
       JwtUtil.removeTokenfromCookie(httpResponse);
       MessageProvider.getMessageString(MessageConstant.JWT_TOKEN_EXPIRED, null,
