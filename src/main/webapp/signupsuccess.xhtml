@@ -21,10 +21,17 @@
 		    text-decoration: none;
 		    background-color: orange;
 		}
+		.menu {
+				border: 1px solid #ccc;
+				border-radius: 1px;
+				padding: 10px;
+				margin: 10px;
+			}
     </style>
    
 
 </h:head>
+
 
 <h:body>
     <script type="text/javascript">
@@ -40,10 +47,14 @@
         });
       }    
     </script>
-    <h:form>
+    <div>
+     <h:form>
+     <div class="menu">
         <p:slideMenu widgetVar="slideMenu1" id="slideMenu" model="#{menuBean.menuModel}" styleClass="custom-menu" />
+     </div>
         <h:commandButton value="Log Out" icon="pi pi-check" action="#{authenticationBean.logout}" styleClass="mt-3" />
-    </h:form>
+     </h:form>
+    </div>
 </h:body>
 
 </html>

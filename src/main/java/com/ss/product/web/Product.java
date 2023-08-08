@@ -8,7 +8,7 @@ public class Product implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private Long id;
 	private String code;
 	private String name;
 	private String description;
@@ -21,7 +21,7 @@ public class Product implements Serializable {
 	public Product() {
 	}
 
-	public Product(int id, String code, String name, String description, String image, double price, String category,
+	public Product(Long id, String code, String name, String description, String image, double price, String category,
 			int quantity, int rating) {
 		this.id = id;
 		this.code = code;
@@ -40,11 +40,11 @@ public class Product implements Serializable {
 				getQuantity(), getRating());
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
