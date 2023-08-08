@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<style>
+/* CSS styles for the page */
+.cards {
+	border: 1px solid #ccc;
+	border-radius: 1px;
+	padding: 10px;
+	margin: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Style for the modal */
+.modals {
+	display: block;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	position: fixed;
+	z-index: 1;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Style for the dialog content */
+.modal-contents {
+	margin: 5% auto;
+	padding: 10px;
+	text-align: center;
+}
+/* Style for the "Save" and "Cancel" buttons */
+.save-button, .cancel-button {
+	display: inline-block;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	text-align: center;
+	margin: 10px 5px; /* Add 5px margin between the buttons */
+}
+
+/* Style for the "Save" button */
+.save-button {
+	background-color: #007bff; /* Blue color */
+	color: #fff; /* White text color */
+}
+
+/* Style for the "Cancel" button */
+.cancel-button {
+	background-color: #d3d3d3; /* Grey color */
+	color: #000; /* Black text color */
+}
+</style>
+</h:head>
+<h:body onload="selectMenu('datatable');">
+    <div style="display: flex;">
+		<!-- Left side: PrimeFaces menu -->
+		<ui:include src="signupsuccess.xhtml" />
+
+	<div class="cards">
+		<h:form id="form" method="post">
+			<!-- Edit Dialog -->
+			<div id="editDialog" >
+				<div class="modal-contents">
+					<h2>Edit User</h2>
+					<h:panelGrid id="dialogPanel" columns="2" cellpadding="5">
+						<h:outputLabel for="code">Code:</h:outputLabel>
+						<h:inputText id="code" value="#{crudView.selectedProduct.code}" />
+						<h:outputLabel for="name">Name:</h:outputLabel>
+						<h:inputText id="name" value="#{crudView.selectedProduct.name}" />
+						<h:outputLabel for="price">Price:</h:outputLabel>
+						<h:inputText id="price" value="#{crudView.selectedProduct.price}" />
+						<h:outputLabel for="category">Category:</h:outputLabel>
+						<h:selectOneRadio id="category"
+							value="#{crudView.selectedProduct.category}" layout="responsive"
+							columns="2">
+							<f:selectItem itemLabel="Accessories" itemValue="Accessories" />
+							<f:selectItem itemLabel="Clothing" itemValue="Clothing" />
+							<f:selectItem itemLabel="Electronics" itemValue="Electronics" />
+							<f:selectItem itemLabel="Fitness" itemValue="Fitness" />
+						</h:selectOneRadio>
+					</h:panelGrid>
+					<h:commandButton value="Save" action="#{crudView.saveOrAddProduct()}"
+						styleClass="save-button"/>
+					<h:commandButton value="Cancel" styleClass="cancel-button" action="#{crudView.redirectToPage('datatable.xhtml')}"
+						 />
+				</div>
+			</div>
+		</h:form>
+	</div>
+</div>
+	<!--     <div id="dialogs"> -->
+	<!--         Product Details Dialog -->
+	<!--         <div class="dialog" id="manageProductDialog"> -->
+	<!--             <div class="dialog-header">Product Details</div> -->
+	<!--             <div class="dialog-content ui-fluid"> -->
+	<!--                 Product details content here -->
+	<!--                 The content will be dynamically populated using JavaScript -->
+	<!--             </div> -->
+	<!--             <div class="dialog-footer"> -->
+	<!--                 <button type="button" class="ui-button ui-button-success" onclick="saveProduct()">Save</button> -->
+	<!--                 <button type="button" class="ui-button ui-button-secondary" onclick="hideManageProductDialog()">Cancel</button> -->
+	<!--             </div> -->
+	<!--         </div> -->
+	<!--     </div> -->
+
+
+</h:body>
+</html>

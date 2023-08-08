@@ -28,7 +28,11 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.1</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>commons-beanutils</groupId>
+		    <artifactId>commons-beanutils</artifactId>
+		    <version>1.9.4</version>
+		</dependency>
 		<!-- this three jwt dependency are required -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

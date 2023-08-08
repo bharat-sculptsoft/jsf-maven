@@ -27,4 +27,5 @@ public class Constant {
 
 	public static final String SESSION_TOKEN_KEY = RIConstants.FACES_PREFIX + "TOKEN";
 	public static final String REQUEST_TOKEN_KEY = "javax.faces.Token";
+	public static final String DataTable ="datatable";
 }
