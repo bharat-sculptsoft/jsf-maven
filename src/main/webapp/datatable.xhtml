@@ -8,11 +8,19 @@
 <h:head>
 	<style>
 /* CSS styles for the page */
-.card {
+.oldcard {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	padding: 20px;
 	margin: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+	border: 1px solid #ccc;
+	border-radius: 1px;
+	padding: 10px;
+	margin: 10px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -102,16 +110,116 @@
 .ui-button-secondary {
 	background-color: #6c757d;
 }
+/* Style for the modal */
+.modal {
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Style for the dialog content */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 50%;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19);
+	text-align: center;
+}
+/* Style for the "Save" and "Cancel" buttons */
+.save-button, .cancel-button, .new-button {
+	display: inline-block;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	text-align: center;
+	margin: 10px 5px; /* Add 5px margin between the buttons */
+}
+
+/* Style for the "Save" button */
+.save-button {
+	background-color: #007bff; /* Blue color */
+	color: #fff; /* White text color */
+}
+
+/* Style for the "Cancel" button */
+.cancel-button {
+	background-color: #d3d3d3; /* Grey color */
+	color: #000; /* Black text color */
+}
+
+/* Style for the "Save" button */
+.new-button{
+	background-color: #008000; /* Green color */
+	color: #fff; /* White text color */
+}
+
+/* Style for the "Edit" and "Delete" buttons container */
+.button-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 5px;
+}
+
+/* Style for the "Edit" button */
+.edit-button, .editnew-button {
+	background-color: #007bff; /* Blue color */
+	color: #fff; /* White text color */
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-right: 10px;
+	/* Add spacing between "Edit" and "Delete" buttons */
+}
+
+.edit-button {
+	background-color: #007bff; /* Grey color */
+	color: #fff; /* Black text color */
+}
+.editnew-button {
+	background-color: #d3d3d3; /* Grey color */
+	color: #000; /* Black text color */
+}
+
+
+/* Style for the "Delete" button */
+.delete-button {
+	background-color: #dc3545; /* Red color */
+	color: #fff; /* White text color */
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-right: 10px;
+}
 </style>
 </h:head>
-<h:body onload="hidDialog()">
+<h:body onload="hidDialog();selectMenu('datatable');">
+    <div style="display: flex;">
+		<!-- Left side: PrimeFaces menu -->
+		<ui:include src="signupsuccess.xhtml" />
+
 	<div class="card crud-demo">
 		<h:form id="form" method="post">
 			<div id="messages">
 				<!-- Growl messages (You can display messages here using JavaScript) -->
 			</div>
-``
-+\            <span style="font-weight: bold">PRODUCTS</span>
+			<span style="font-weight: bold">PRODUCTS</span>
+			<h:commandButton value="Add New" styleClass="new-button" action="#{crudView.selectProduct(product)}">
+							<f:ajax onevent="showDialog('#{product}')" render="@form" />
+			</h:commandButton>
 			<span class="search-container ui-input-icon-right"> <i
 				class="pi pi-search search-icon"></i> <h:inputText
 					placeholder="Search" value="#{crudView.searchQuery}"
@@ -129,18 +237,28 @@
 					<h:selectBooleanCheckbox />
 				</h:column>
 				<input type="checkbox" />
+            	<h:column>
+			        <f:facet name="header">
+			            <h:outputText value="Code" />
+						 <h:commandLink action="#{crudView.sort('code')}" value="#{(crudView.sortField eq 'code') ? (crudView.sortOrder eq 'asc' ? '▲' : '▼') : '↑↓'}">
+			    		 </h:commandLink>
+			        </f:facet>
+        			<h:outputText value="#{product.code}" />
+    			</h:column>
 				<h:column>
-					<f:facet name="header">Code</f:facet>
-                #{product.code}
-            </h:column>
+					<f:facet name="header"><h:outputText value="Name" />
+						 <h:commandLink action="#{crudView.sort('name')}" value="#{(crudView.sortField eq 'name') ? (crudView.sortOrder eq 'asc' ? '▲' : '▼') : '↑↓'}">
+			    		 </h:commandLink>
+			        </f:facet>
+        			<h:outputText value="#{product.name}" />
+               </h:column>
 				<h:column>
-					<f:facet name="header">Name</f:facet>
-                #{product.name}
-            </h:column>
-				<h:column>
-					<f:facet name="header">Price</f:facet>
-                $#{product.price}
-            </h:column>
+                <f:facet name="header"><h:outputText value="Price" />
+						 <h:commandLink action="#{crudView.sort('price')}" value="#{(crudView.sortField eq 'price') ? (crudView.sortOrder eq 'asc' ? '▲' : '▼') : '↑↓'}">
+			    		 </h:commandLink>
+			        </f:facet>
+        			<h:outputText value="$#{product.price}" />
+                </h:column>
 				<h:column>
 					<f:facet name="header">Category</f:facet>
                 #{product.category}
@@ -150,15 +268,20 @@
                 #{product.rating}
             </h:column>
 				<h:column>
+					<!-- 				Keeping showDialog('#{product}' for future ref how to pass the variable-->
 					<f:facet name="header">Action</f:facet>
-					<h:commandButton value="Edit" styleClass="edit-button"
-						action="#{crudView.selectProduct(product)}">
-						<f:ajax onevent="showDialogAndSelectProduct('#{product}')"
-							render="@form" />
-					</h:commandButton>
-					<h:commandButton value="Delete" styleClass="delete-button"
-						action="#{crudView.deleteProduct(product)}">
-					</h:commandButton>
+					<div class="button-container">
+						<h:commandButton value="Edit" styleClass="edit-button"
+							action="#{crudView.selectProduct(product)}">
+							<f:ajax onevent="showDialog('#{product}')" render="@form" />
+						</h:commandButton>
+						<h:commandButton value="Delete" styleClass="delete-button"
+							action="#{crudView.deleteProduct(product)}">
+						</h:commandButton>
+						<h:commandButton value="Edit New" styleClass="editnew-button"
+							action="#{crudView.editProduct(product)}">
+						</h:commandButton>
+					</div>
 				</h:column>
 			</h:dataTable>
 			<!-- Pagination controls -->
@@ -184,34 +307,37 @@
 
 			<!-- Edit Dialog -->
 			<div id="editDialog" class="modal">
-				<h2>Edit User</h2>
-				<h:panelGrid id="dialogPanel" columns="2" cellpadding="5">
-					<h:outputLabel for="code">Code:</h:outputLabel>
-					<h:inputText id="code" value="#{crudView.selectedProduct.code}" />
-					<h:outputLabel for="name">Name:</h:outputLabel>
-					<h:inputText id="name" value="#{crudView.selectedProduct.name}" />
-					<h:outputLabel for="price">Price:</h:outputLabel>
-					<h:inputText id="price" value="#{crudView.selectedProduct.price}" />
-					<h:outputLabel for="category">Category:</h:outputLabel>
-					<h:selectOneRadio id="category"
-						value="#{crudView.selectedProduct.category}" layout="responsive"
-						columns="2">
-						<f:selectItem itemLabel="Accessories" itemValue="Accessories" />
-						<f:selectItem itemLabel="Clothing" itemValue="Clothing" />
-						<f:selectItem itemLabel="Electronics" itemValue="Electronics" />
-						<f:selectItem itemLabel="Fitness" itemValue="Fitness" />
-					</h:selectOneRadio>
-				</h:panelGrid>
-				<h:commandButton value="Save" action="#{crudView.saveNewProduct()}"
-					styleClass="save-button"
-					onclick="document.getElementById('editDialog').style.display='none';"
-					update="dt-products " />
-				<h:commandButton value="Cancel" styleClass="cancel-button"
-					onclick="document.getElementById('editDialog').style.display='none';" />
+				<div class="modal-content">
+					<h2>Edit User</h2>
+					<h:panelGrid id="dialogPanel" columns="2" cellpadding="5">
+						<h:outputLabel for="code">Code:</h:outputLabel>
+						<h:inputText id="code" value="#{crudView.selectedProduct.code}" />
+						<h:outputLabel for="name">Name:</h:outputLabel>
+						<h:inputText id="name" value="#{crudView.selectedProduct.name}" />
+						<h:outputLabel for="price">Price:</h:outputLabel>
+						<h:inputText id="price" value="#{crudView.selectedProduct.price}" />
+						<h:outputLabel for="category">Category:</h:outputLabel>
+						<h:selectOneRadio id="category"
+							value="#{crudView.selectedProduct.category}" layout="responsive"
+							columns="2">
+							<f:selectItem itemLabel="Accessories" itemValue="Accessories" />
+							<f:selectItem itemLabel="Clothing" itemValue="Clothing" />
+							<f:selectItem itemLabel="Electronics" itemValue="Electronics" />
+							<f:selectItem itemLabel="Fitness" itemValue="Fitness" />
+						</h:selectOneRadio>
+					</h:panelGrid>
+					<h:commandButton value="Save" action="#{crudView.saveNewProduct()}"
+						styleClass="save-button"
+						onclick="document.getElementById('editDialog').style.display='none';"
+						update="dt-products " />
+					<h:commandButton value="Cancel" styleClass="cancel-button"
+						onclick="document.getElementById('editDialog').style.display='none';" />
+				</div>
 			</div>
 		</h:form>
 	</div>
-
+		
+	</div>
 	<!--     <div id="dialogs"> -->
 	<!--         Product Details Dialog -->
 	<!--         <div class="dialog" id="manageProductDialog"> -->
@@ -228,27 +354,19 @@
 	<!--     </div> -->
 
 	<script>
-   	function hidDialog(){
-   	//	alert('hide');
-   		document.getElementById('editDialog').style.display = 'none';
-   	}
-    function showDialogAndSelectProduct(product) {
-        // Show the dialog
-   //    alert(product);
-        document.getElementById('editDialog').style.display = 'block';
-//         Call the managed bean method to select the product
-//         Assuming you have a `selectProduct` method in the managed bean (crudView)
-//         You can use AJAX to call the method to avoid page refresh
-//        var form = document.getElementById('editDialogForm');
-//        form.elements['selectedProduct'].value = product;
-//        form.submit();
-     // Set the hidden input value to the selected product
-        //document.getElementById('editDialogForm:selectedProduct').value = product;
-
-        // Submit the form to call the managed bean method
-      //  document.getElementById('editDialogForm').submit();
-        
-    }
-</script>
+		function hidDialog() {
+			//alert('hide');
+			document.getElementById('editDialog').style.display = 'none';
+			//selectMenu('datatable');
+		}
+		function showDialog(product) {
+			// Show the dialog
+			document.getElementById('editDialog').style.display = 'block';
+		}
+		function showDialog() {
+			// Show the dialog
+			document.getElementById('editDialog').style.display = 'block';
+		}
+	</script>
 </h:body>
 </html>

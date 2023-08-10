@@ -1,6 +1,7 @@
 package com.ss.filter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import javax.faces.application.FacesMessage;
