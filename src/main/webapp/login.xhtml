@@ -3,42 +3,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:c="http://java.sun.com/jsf/core"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<title>User Login</title>
-</h:head>
+	xmlns:p="http://primefaces.org/ui" lang="#{localeBean.language}">
+<f:view locale="#{localeBean.locale}">
 
-<h:body>
+	<h:head>
+		<title>#{msg['login.title.static']}</title>
+	</h:head>
+	<h:body>
 
-	<div class="card">
-		<h:form id="form-id">
-			<p:messages id="msgs" />
+		<div class="card">
+			<h:form id="form-id">
+				<p:messages id="msgs" />
 
-			<p:panelGrid id="grid" cellpadding="7" columns="3">
-				<p:outputLabel for="email-id" value="Email:" />
-				<p:inputText id="email-id" value="#{authenticationBean.email}"
-					a:placeholder="Enter your email." required="true"
-					requiredMessage="Email is required" />
-				<p:message for="email-id"/>
+				<p:panelGrid id="grid" cellpadding="7" columns="3">
+					<p:outputLabel id="email1" for="email-id"
+						value="#{msg['login.form-id.outputLabel.label.email1']}" />
+					<p:inputText id="email-id" value="#{authenticationBean.email}"
+						a:placeholder="#{msg['login.form-id.inputText.placeholder.email-id']}"
+						required="true"
+						requiredMessage="#{msg['login.form-id.inputText.requiredMessage.email-id']}" />
+					<p:message for="email-id" />
 
-				<p:outputLabel for="pwd-id" value="Password:" />
-				<p:password id="pwd-id" label="Password"
-					value="#{authenticationBean.password}"
-					a:placeholder="Enter your password." />
-				<p:message for="pwd-id" />
+					<p:outputLabel id="pwd1" for="pwd-id"
+						value="#{msg['login.form-id.outputLabel.label.pwd1']}" />
+					<p:password id="pwd-id" value="#{authenticationBean.password}"
+						a:placeholder="#{msg['login.form-id.password.placeholder.pwd-id']}" />
+					<p:message for="pwd-id" />
 
-			</p:panelGrid>
+				</p:panelGrid>
 
-			<br />
+				<br />
     &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp; 
-		<p:commandButton value="Login" action="#{authenticationBean.login}"
-				update="grid msgs" styleClass="mr-2" validateClient="true"
-				process="@form" />
+		<p:commandButton id="login1"
+					value="#{msg['login.form-id.commonButton.login.login1']}"
+					action="#{authenticationBean.login}" update="grid msgs"
+					styleClass="mr-2" validateClient="true" process="@form" />
 
-		</h:form>
-	</div>
-</h:body>
-
+			</h:form>
+		</div>
+	</h:body>
+</f:view>
 </html>
