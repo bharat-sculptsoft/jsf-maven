@@ -6,40 +6,46 @@
 
 	<application>
 		<locale-config>
-			<default-locale>en</default-locale>
+		<default-locale>en</default-locale>
+        <supported-locale>en</supported-locale>
 			<supported-locale>de</supported-locale>
 		</locale-config>
 		<message-bundle>ValidationMessages</message-bundle>
+		<resource-bundle>
+			<base-name>TextMessages</base-name>
+			<var>msg</var>
+		</resource-bundle>
+
 	</application>
 
- <navigation-rule>
-        <from-view-id>/*</from-view-id>
-        <navigation-case>
-            <from-outcome>signup</from-outcome>
-            <to-view-id>*.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-  		<navigation-case>
-            <from-outcome>card</from-outcome>
-            <to-view-id>*.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>success</from-outcome>
-            <to-view-id>*.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>failure</from-outcome>
-            <to-view-id>/login.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule>
-    
-    <!-- Protect the view pages with unique token -->
-    <protected-views>
-		<url-pattern>/login.xhtml</url-pattern>    	
-    	<url-pattern>/signup.xhtml</url-pattern>
-    	<url-pattern>/success.xhtml</url-pattern>
-    </protected-views>
+	<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>signup</from-outcome>
+			<to-view-id>*.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>card</from-outcome>
+			<to-view-id>*.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>*.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>failure</from-outcome>
+			<to-view-id>/login.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+
+	<!-- Protect the view pages with unique token -->
+	<protected-views>
+		<url-pattern>/login.xhtml</url-pattern>
+		<url-pattern>/signup.xhtml</url-pattern>
+		<url-pattern>/success.xhtml</url-pattern>
+	</protected-views>
 </faces-config>
