@@ -60,7 +60,6 @@ public class JwtFilter implements Filter {
 
 			String token = extractTokenFromRequest(httpRequest);
 			if (token != null && JwtUtil.validateToken(token)) {
-				System.out.println("validate token----" + token);
 
 				httpRequest.setAttribute(Constant.USER_PALYLOAD, JwtUtil.getSubjectFromToken(token));
 				// Token is valid, proceed with the request
