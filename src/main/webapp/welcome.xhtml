@@ -17,30 +17,39 @@
     }
     </h:outputScript>
 </h:head>
-	<h:body onload="checkForMessage();">	
-		<div class="card">
-			<p:growl id="growl" showDetail="true" widgetVar="growlWidget" />
+<h:body onload="checkForMessage();">
+	<div class="card">
+		<p:growl id="growl" showDetail="true" widgetVar="growlWidget" />
 
-			<h:form>
-				<h:panelGrid columns="2">
+		<h:form>
+			<h:panelGrid columns="2">
 				
 		Language : 
 		<h:selectOneMenu value="#{localeBean.language}" onchange="submit()">
-                <f:selectItem itemValue="en" itemLabel="English" />
-                <f:selectItem itemValue="de" itemLabel="German" />
-            </h:selectOneMenu>
+					<f:selectItem itemValue="en" itemLabel="English" />
+					<f:selectItem itemValue="de" itemLabel="German" />
+				</h:selectOneMenu>
 
-					</h:panelGrid>
+			</h:panelGrid>
 
-					<h4 id="h1">#{msg['welcome.head.static.h1']}</h4>
-					<h:commandButton id="login1"
-						value="#{msg['welcome.commonButton.login.login1']}"
-						action="login?faces-redirect=true" />
-					<p></p>
-					<h:commandButton id="signup1"
-						value="#{msg['welcome.commonButton.signup.signup1']}"
-						action="signup?faces-redirect=true" />
-			</h:form>
-		</div>
-	</h:body>
+			<h4 id="h1">#{msg['welcome.head.static.h1']}</h4>
+			<h:commandButton id="login1"
+				value="#{msg['welcome.commonButton.login.login1']}"
+				action="login?faces-redirect=true" />
+			<p></p>
+			<h:commandButton id="signup1"
+				value="#{msg['welcome.commonButton.signup.signup1']}"
+				action="signup?faces-redirect=true" />
+
+			<p></p>
+			<p:outputLabel for="message"  value="message" styleClass="control-label"/>
+       		<p:inputText id="message" value="#{welcomeBean.message}"/>
+			<p></p>
+			<h:commandButton value="Save product"
+				action="#{welcomeBean.publishProductMessage}" />
+<h:commandButton value="Save employee"
+				action="#{welcomeBean.publishEmployeeMessage}" />
+		</h:form>
+	</div>
+</h:body>
 </html>
