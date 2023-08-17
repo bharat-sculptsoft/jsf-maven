@@ -1,11 +1,8 @@
 package com.ss.filter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -17,14 +14,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.primefaces.PrimeFaces;
-
 import com.ss.message.Constant;
 import com.ss.message.MessageConstant;
 import com.ss.message.MessageProvider;
 import com.ss.util.CommonUtil;
 import com.ss.util.FileReaderWriterUtil;
 import com.ss.util.JwtUtil;
+
 import io.jsonwebtoken.ExpiredJwtException;
 
 @WebFilter("/*")
@@ -64,24 +60,26 @@ public class JwtFilter implements Filter {
 
 			String token = extractTokenFromRequest(httpRequest);
 			if (token != null && JwtUtil.validateToken(token)) {
-				System.out.println("validate token----"+token);
 
 				httpRequest.setAttribute(Constant.USER_PALYLOAD, JwtUtil.getSubjectFromToken(token));
 				// Token is valid, proceed with the request
 				chain.doFilter(request, response);
 			} else {
 				// Token is invalid or not present, redirect to login page or show an error
-				httpRequest.setAttribute("errorMessage",MessageProvider.getMessageString(MessageConstant.JWT_INVALID_TOKEN, null, httpRequest.getLocale()));
-				//httpResponse.sendRedirect(httpRequest.getContextPath() + "/welcome.xhtml");
+				httpRequest.setAttribute("errorMessage", MessageProvider
+						.getMessageString(MessageConstant.JWT_INVALID_TOKEN, null, httpRequest.getLocale()));
+				// httpResponse.sendRedirect(httpRequest.getContextPath() + "/welcome.xhtml");
 				httpRequest.getRequestDispatcher("/welcome.xhtml").forward(httpRequest, httpResponse);
 			}
 		} catch (ExpiredJwtException e) {
 			JwtUtil.removeTokenfromCookie(httpResponse);
-			httpRequest.setAttribute("errorMessage",MessageProvider.getMessageString(MessageConstant.JWT_TOKEN_EXPIRED, null, httpRequest.getLocale()));
+			httpRequest.setAttribute("errorMessage",
+					MessageProvider.getMessageString(MessageConstant.JWT_TOKEN_EXPIRED, null, httpRequest.getLocale()));
 			httpRequest.getRequestDispatcher("/welcome.xhtml").forward(httpRequest, httpResponse);
 		} catch (Exception e) {
-			//httpResponse.sendRedirect(httpRequest.getContextPath() + "/welcome.xhtml");
-			httpRequest.setAttribute("errorMessage", MessageProvider.getMessageString(MessageConstant.INTERNAL_SERVER_ERROR, null, httpRequest.getLocale()));
+			// httpResponse.sendRedirect(httpRequest.getContextPath() + "/welcome.xhtml");
+			httpRequest.setAttribute("errorMessage", MessageProvider
+					.getMessageString(MessageConstant.INTERNAL_SERVER_ERROR, null, httpRequest.getLocale()));
 			httpRequest.getRequestDispatcher("/welcome.xhtml").forward(httpRequest, httpResponse);
 
 		}
@@ -99,11 +97,11 @@ public class JwtFilter implements Filter {
 		// themeURL need to skip because its required to load html,js,css content
 		String themeURL = httpRequest.getContextPath() + "/javax.faces.resource";
 
-		
 		return (httpRequest.getRequestURI().equals(defaultURL) || httpRequest.getRequestURI().equals(loginURL)
 				|| httpRequest.getRequestURI().equals(loginHtmlURL) || httpRequest.getRequestURI().equals(newSignupURL)
 				|| httpRequest.getRequestURI().equals(signupURL) || httpRequest.getRequestURI().equals(welcomeURL)
-				|| httpRequest.getRequestURI().equals(welcomeHtmlURL) || httpRequest.getRequestURI().contains(themeURL));
+				|| httpRequest.getRequestURI().equals(welcomeHtmlURL)
+				|| httpRequest.getRequestURI().contains(themeURL));
 	}
 
 	private String extractTokenFromRequest(HttpServletRequest request) {

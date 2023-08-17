@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 public class CommonUtil {
 
   public static String encode(String dataString) throws UnsupportedEncodingException {
-    return URLEncoder.encode(dataString, StandardCharsets.UTF_8.toString());
+    return URLEncoder.encode(dataString, StandardCharsets.UTF_8.name());
   }
 }
 
