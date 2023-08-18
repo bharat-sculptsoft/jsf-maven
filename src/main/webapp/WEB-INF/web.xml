@@ -13,16 +13,31 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-	
+
+	<!-- JAX-RS Configuration -->
+	<servlet>
+		<servlet-name>Jersey</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer
+		</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>com.ss.product.service</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+
 	<context-param>
 		<param-name>org.omnifaces.FACES_VIEWS_SCAN_PATHS</param-name>
 		<param-value>/*.xhtml</param-value>
 	</context-param>
-	
+
 	<welcome-file-list>
-		<welcome-file>login.xhtml</welcome-file>
+		<welcome-file>welcome.xhtml</welcome-file>
 	</welcome-file-list>
-	
+
 	<resource-ref>
 		<description>postgreSQL Datasource example</description>
 		<res-ref-name>jdbc/postgres</res-ref-name>

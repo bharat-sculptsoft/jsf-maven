@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -101,8 +103,11 @@ public class FileReaderWriterUtil {
     }
   }
 
-  private static String getFilePath() {
-    File file = new File("C:\\Mehul\\Workspace\\JSF\\jsf-maven-project\\requestdata.txt");
+  private static String getFilePath() throws IOException {
+    File file = new File("..\\test.txt");
+    if(!file.exists()) {
+    	file.createNewFile();
+    }
     return file.getAbsolutePath();
   }
 }

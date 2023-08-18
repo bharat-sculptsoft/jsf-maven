@@ -10,3 +10,4 @@ public class CommonUtil {
     return URLEncoder.encode(dataString, StandardCharsets.UTF_8.toString());
   }
 }
+
