@@ -1,11 +1,7 @@
 package com.ss.filter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -16,20 +12,19 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.primefaces.PrimeFaces;
-
 import com.ss.message.Constant;
 import com.ss.message.MessageConstant;
 import com.ss.message.MessageProvider;
+import com.ss.util.CacheManagerUtil;
 import com.ss.util.CommonUtil;
-import com.ss.util.FileReaderWriterUtil;
 import com.ss.util.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 
 @WebFilter("/*")
 public class JwtFilter implements Filter {
 
+    private Boolean isContains = false;
+  
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -49,9 +44,13 @@ public class JwtFilter implements Filter {
 			}
 
 			if (sessionToken != null && requestToken != null && sessionToken.equals(requestToken)) {
-				FileReaderWriterUtil.writeRequestDetails(requestToken);
+			    //FileReaderWriterUtil.writeRequestDetails(requestToken);
+			    if(!isContains) {
+			      isContains = CacheManagerUtil.storeDataInCache(requestToken);
+			    }
 			} else if (requestToken != null) {
-				Boolean isContains = FileReaderWriterUtil.readRequestDetails(requestToken);
+				//Boolean isContains = FileReaderWriterUtil.readRequestDetails(requestToken);
+			    isContains = CacheManagerUtil.getDataFromCache(requestToken);
 				if (isContains.equals(Boolean.TRUE)) {
 					httpRequest.getSession().setAttribute(Constant.SESSION_TOKEN_KEY, requestToken);
 				}

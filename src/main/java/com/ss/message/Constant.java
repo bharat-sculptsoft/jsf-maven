@@ -28,4 +28,8 @@ public class Constant {
 	public static final String SESSION_TOKEN_KEY = RIConstants.FACES_PREFIX + "TOKEN";
 	public static final String REQUEST_TOKEN_KEY = "javax.faces.Token";
 	public static final String DataTable ="datatable";
+	
+	// TODO: Replace your system directory path
+	public static final String CACHE_ROOT_DIRECTORY = "C:\\Mehul\\Workspace\\JSF";
+	public static final String CACHE_NAME = "jsfCache";
 }

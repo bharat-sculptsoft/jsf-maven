@@ -12,8 +12,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import com.ss.message.Constant;
 import com.ss.user.service.UserService;
+import com.ss.util.CacheManagerUtil;
 import com.ss.util.CommonUtil;
-import com.ss.util.FileReaderWriterUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -51,8 +51,8 @@ public class AuthenticationBean implements Serializable {
     try {
       userService.logoutUser();
 
-      //delete the request details from the file
-      deleteUserRequestDetails();
+      //delete the request details from the catch
+      deleteRequestDetailsFromCache();
 
       // Perform any additional cleanup or logout logic
       return Constant.WELCOME_PAGE_REDIRECT_URL;
@@ -63,14 +63,15 @@ public class AuthenticationBean implements Serializable {
     return null;
   }
 
-  private void deleteUserRequestDetails() throws Exception {
+  private void deleteRequestDetailsFromCache() throws Exception {
     FacesContext context = FacesContext.getCurrentInstance();
     ExternalContext externalContext = context.getExternalContext();
     Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
     String requestToken = requestParameterMap.get(Constant.REQUEST_TOKEN_KEY);
     if(requestToken != null) {
       requestToken = CommonUtil.encode(requestToken);
+      CacheManagerUtil.removeDataFromCache(requestToken);
     }
-    FileReaderWriterUtil.deleteRequestDetails(requestToken);
+    //FileReaderWriterUtil.deleteRequestDetails(requestToken);
   }
 }
